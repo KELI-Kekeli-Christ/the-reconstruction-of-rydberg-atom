@@ -1,0 +1,4 @@
+n,dim,g_type,g_value,best_obj
+50,2,2sqrt(n),15,70193.61215415882
+50,2,sqrt(n),8,4424.039870359901
+50,2,sqrt(n)/2,4,NaN
