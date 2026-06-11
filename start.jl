@@ -1,96 +1,69 @@
-using Distributed
+using Pkg
+using JuMP, Ipopt, LinearAlgebra, CSV, DataFrames
 
-if nprocs() == 1
-    addprocs() 
-end
+n_values  = [2,3,100]
+limit_dim = 2
+L         = 10
+c6        = 1
 
-@everywhere using JuMP, Ipopt, LinearAlgebra, StatsBase
+const MOI = JuMP.MOI
 
-# --- TOUT LE CALCUL EST ENFERMÉ DANS UNE FONCTION COMPILÉE ---
-@everywhere function run_single_start(all_intersections, Q, n, dim, c6)
-    model = Model(Ipopt.Optimizer)
-    set_optimizer_attribute(model, "print_level", 0)
-    
-    # Ajout de tolérances pour accélérer la convergence d'Ipopt
-    set_optimizer_attribute(model, "tol", 1e-4)
-    set_optimizer_attribute(model, "max_iter", 500)
-    
-    @variable(model, x_opt[1:n, 1:dim] >= 0)
+results = DataFrame(
+    n           = Int[],
+    dim         = Int[],
+    formulation = String[],
+    obj         = Float64[],
+    status      = String[],
+    time_s      = Float64[]
+)
 
-    # Tirage initial unique
-    chosen_points = sample(all_intersections, n, replace=false)
-    for i in 1:n
-        for k in 1:dim
-            set_start_value(x_opt[i,k], chosen_points[i][k])
-        end
-    end
-    
-    # Objectif optimisé avec sécurité anti-division par zéro (+1e-6)
-    @objective(model, Min, sum(
-        ( (c6 / (sum((x_opt[i,k] - x_opt[j,k])^2 for k in 1:dim) + 1e-6)^3) - Q[i,j] )^2 
-        for i in 1:n for j in (i+1):n
-    ))
-    
-    optimize!(model)
-    
-    # Extraction sécurisée des résultats
-    try
-        return (objective_value(model), value.(x_opt))
-    catch
-        return (Inf, nothing)
-    end
-end
-
-# --- FONCTION DE GESTION DE L'INSTANCE ---
-function solve_instance(n, dim, L, c6, n_starts)
-    println("\n--- RUN : n = ", n, ", dim = ", dim, " ---")
-    
-    x = L * rand(n, dim)
-    Q = zeros(n, n)
-    for i in 1:n
-        for j in i+1:n
-            norm_value = norm(x[i,:] - x[j,:])
-            Q[i,j] = c6 / (norm_value)^6
-            Q[j,i] = c6 / (norm_value)^6
-        end
-    end
-
-    g = 2 * sqrt(n) |> ceil |> Int
-    grid_vals = range(0, stop=L, length=g)
-    println("g = ", g, " (soit ", g^dim, " intersections disponibles pour ", n, " points)")
-
-    all_intersections = [collect(p) for p in Iterators.product(fill(grid_vals, dim)...)]
-
-    # Distribution parallèle des lancements pré-compilés
-    results = @distributed (vcat) for start in 1:n_starts
-        [run_single_start(all_intersections, Q, n, dim, c6)]
-    end
-    
-    best_obj = Inf
-    best_x = nothing
-    for res in results
-        if res[1] < best_obj
-            best_obj = res[1]
-            best_x = res[2]
-        end
-    end
-    
-    println("best_objective_value = ", best_obj)
-    return best_obj, best_x
-end
-
-# --- SCRIPT PRINCIPAL EXÉCUTABLE ---
-const limit_points = 10
-const limit_dim = 2
-const number_generation_per_instance = 1
-const L = 10.0
-const c6 = 1.0
-const n_starts = 100
-
-for n in 10:limit_points
+for n in n_values
     for dim in 2:limit_dim
-        for _ in 1:number_generation_per_instance
-            solve_instance(n, dim, L, c6, n_starts)
+        println("\n=== n=$n, dim=$dim ===")
+
+        x_init = L * rand(n, dim)
+        Q = zeros(n, n)
+        for i in 1:n
+            for j in i+1:n
+                d = norm(x_init[i,:] - x_init[j,:])
+                Q[i,j] = c6 / d^6
+                Q[j,i] = c6 / d^6
+            end
         end
+
+        t0 = time()
+        m2 = Model(Ipopt.Optimizer)
+        set_optimizer_attribute(m2, "print_level", 0)
+        set_optimizer_attribute(m2, "tol", 1e-12)
+
+        @variable(m2, x2[1:n, 1:dim] >= 0)
+        @variable(m2, r[i=1:n, j=i+1:n])
+
+        # Points de départ
+        for i in 1:n, d in 1:dim
+            set_start_value(x2[i,d], x_init[i,d])
+        end
+        for i in 1:n
+            for j in i+1:n
+                d_sq = sum((x_init[i,k] - x_init[j,k])^2 for k in 1:dim)
+                set_start_value(r[i,j], c6 / d_sq^3)
+            end
+        end
+
+        # Contrainte : r[i,j] * (||xi-xj||^2)^3 = c6
+        @constraint(m2, [i=1:n, j=i+1:n], 
+            r[i,j] * (sum((x2[i,k] - x2[j,k])^2 for k=1:dim))^3 == c6
+        )
+
+        @objective(m2, Min, sum((r[i,j] - Q[i,j])^2 for i=1:n for j=i+1:n))
+
+        optimize!(m2)
+        t2 = time() - t0
+        obj2 = objective_value(m2)
+        status = termination_status(m2)
+        println("  [Reformulée] status=$status  obj=$obj2  t=$(round(t2,digits=2))s")
+        push!(results, (n, dim, "reformulee", obj2, string(status), t2))
     end
 end
+
+println(results)

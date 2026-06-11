@@ -1,0 +1,814 @@
+
+^C(base) christ@christ:~/stage_LMA_2026/julia_programming$ julia benchmark_bruit.jl 
+
+══════════════════════════════════════════════════════════════
+  n=2    |  L_fixe  (L=10.00)
+══════════════════════════════════════════════════════════════
+    [MDS_Exact   ] obj_rydberg=+0.000e+00  t= 0.00009s  [EXACT]
+
+  ── Stratégie : single ──
+
+******************************************************************************
+This program contains Ipopt, a library for large-scale nonlinear optimization.
+ Ipopt is released as open source code under the Eclipse Public License (EPL).
+         For more information visit https://github.com/coin-or/Ipopt
+******************************************************************************
+
+    [Standard    ] obj_solver=+2.343e-07  obj_rydberg=+2.343e-07  t=  6.86s  [ALMOST_LOCALLY_SOLVE]
+    [Reformulee  ] obj_solver=+2.130e-06  obj_rydberg=+2.130e-06  t=  0.93s  [ALMOST_LOCALLY_SOLVE]
+    [Polaire     ] obj_solver=+4.735e-23  obj_rydberg=+4.735e-23  t=  0.61s  [LOCALLY_SOLVED]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +2.343e-07
+    │  x_sol[Reformulee  ] → err_Rydberg = +2.130e-06
+    │  x_sol[Polaire     ] → err_Rydberg = +4.735e-23
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +0.000e+00
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+  ── Stratégie : multistart ──
+    [Standard    ] obj_solver=+7.232e-19  obj_rydberg=+7.232e-19  t=  0.01s  [LOCALLY_SOLVED]
+    [Reformulee  ] obj_solver=+0.000e+00  obj_rydberg=+2.597e-33  t=  0.01s  [LOCALLY_SOLVED]
+    [Polaire     ] obj_solver=+4.735e-23  obj_rydberg=+4.735e-23  t=  0.01s  [LOCALLY_SOLVED]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +7.232e-19
+    │  x_sol[Reformulee  ] → err_Rydberg = +2.597e-33
+    │  x_sol[Polaire     ] → err_Rydberg = +4.735e-23
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +0.000e+00
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+══════════════════════════════════════════════════════════════
+  n=2    |  L_adaptatif  (L=141.42)
+══════════════════════════════════════════════════════════════
+    [MDS_Exact   ] obj_rydberg=+3.197e-53  t= 0.00003s  [EXACT]
+
+  ── Stratégie : single ──
+    [Standard    ] obj_solver=+5.376e-22  obj_rydberg=+5.376e-22  t=  0.00s  [LOCALLY_SOLVED]
+    [Reformulee  ] obj_solver=+5.376e-22  obj_rydberg=+5.376e-22  t=  0.00s  [LOCALLY_SOLVED]
+    [Polaire     ] obj_solver=+5.374e-22  obj_rydberg=+5.374e-22  t=  0.00s  [LOCALLY_SOLVED]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +5.376e-22
+    │  x_sol[Reformulee  ] → err_Rydberg = +5.376e-22
+    │  x_sol[Polaire     ] → err_Rydberg = +5.374e-22
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +3.197e-53
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+  ── Stratégie : multistart ──
+    [Standard    ] obj_solver=+5.376e-22  obj_rydberg=+5.376e-22  t=  0.00s  [LOCALLY_SOLVED]
+    [Reformulee  ] obj_solver=+5.376e-22  obj_rydberg=+5.376e-22  t=  0.00s  [LOCALLY_SOLVED]
+    [Polaire     ] obj_solver=+5.374e-22  obj_rydberg=+5.374e-22  t=  0.00s  [LOCALLY_SOLVED]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +5.376e-22
+    │  x_sol[Reformulee  ] → err_Rydberg = +5.376e-22
+    │  x_sol[Polaire     ] → err_Rydberg = +5.374e-22
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +3.197e-53
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+══════════════════════════════════════════════════════════════
+  n=3    |  L_fixe  (L=10.00)
+══════════════════════════════════════════════════════════════
+    [MDS_Exact   ] obj_rydberg=+2.455e-34  t= 0.00010s  [EXACT]
+
+  ── Stratégie : single ──
+    [Standard    ] obj_solver=+5.561e-08  obj_rydberg=+5.561e-08  t=  0.03s  [ALMOST_LOCALLY_SOLVE]
+    [Reformulee  ] obj_solver=+1.443e-04  obj_rydberg=+1.443e-04  t=  0.04s  [ALMOST_LOCALLY_SOLVE]
+    [Polaire     ] obj_solver=+1.122e-20  obj_rydberg=+1.122e-20  t=  0.03s  [LOCALLY_SOLVED]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +5.561e-08
+    │  x_sol[Reformulee  ] → err_Rydberg = +1.443e-04
+    │  x_sol[Polaire     ] → err_Rydberg = +1.122e-20
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +2.455e-34
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+  ── Stratégie : multistart ──
+    [Standard    ] obj_solver=+3.658e-19  obj_rydberg=+3.658e-19  t=  0.05s  [LOCALLY_SOLVED]
+    [Reformulee  ] obj_solver=+9.000e-22  obj_rydberg=+2.232e-27  t=  0.10s  [LOCALLY_SOLVED]
+    [Polaire     ] obj_solver=+1.122e-20  obj_rydberg=+1.122e-20  t=  0.01s  [LOCALLY_SOLVED]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +3.658e-19
+    │  x_sol[Reformulee  ] → err_Rydberg = +2.232e-27
+    │  x_sol[Polaire     ] → err_Rydberg = +1.122e-20
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +2.455e-34
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+══════════════════════════════════════════════════════════════
+  n=3    |  L_adaptatif  (L=173.21)
+══════════════════════════════════════════════════════════════
+    [MDS_Exact   ] obj_rydberg=+2.357e-42  t= 0.00006s  [EXACT]
+
+  ── Stratégie : single ──
+    [Standard    ] obj_solver=+4.407e-14  obj_rydberg=+4.407e-14  t=  0.00s  [LOCALLY_SOLVED]
+    [Reformulee  ] obj_solver=+4.407e-14  obj_rydberg=+4.407e-14  t=  0.00s  [LOCALLY_SOLVED]
+    [Polaire     ] obj_solver=+4.407e-14  obj_rydberg=+4.407e-14  t=  0.00s  [LOCALLY_SOLVED]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +4.407e-14
+    │  x_sol[Reformulee  ] → err_Rydberg = +4.407e-14
+    │  x_sol[Polaire     ] → err_Rydberg = +4.407e-14
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +2.357e-42
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+  ── Stratégie : multistart ──
+    [Standard    ] obj_solver=+4.407e-14  obj_rydberg=+4.407e-14  t=  0.00s  [LOCALLY_SOLVED]
+    [Reformulee  ] obj_solver=+4.407e-14  obj_rydberg=+4.407e-14  t=  0.00s  [LOCALLY_SOLVED]
+    [Polaire     ] obj_solver=+4.407e-14  obj_rydberg=+4.407e-14  t=  0.00s  [LOCALLY_SOLVED]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +4.407e-14
+    │  x_sol[Reformulee  ] → err_Rydberg = +4.407e-14
+    │  x_sol[Polaire     ] → err_Rydberg = +4.407e-14
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +2.357e-42
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+
+══════════════════════════════════════════════════════════════════════
+  TABLEAU COMPARATIF FINAL — obj_rydberg (métrique universelle)
+══════════════════════════════════════════════════════════════════════
+──────────────────────────────────────────────────────────────────────
+
+  n=2    L_fixe
+    MDS_Exact    [exact      ]  obj_ry=+0.0000e+00  t= 0.0001s ← ★
+    Standard     [single     ]  obj_ry=+2.3428e-07  t= 6.8595s
+    Reformulee   [single     ]  obj_ry=+2.1305e-06  t= 0.9279s
+    Polaire      [single     ]  obj_ry=+4.7348e-23  t= 0.6121s
+    Standard     [multistart ]  obj_ry=+7.2321e-19  t= 0.0107s
+    Reformulee   [multistart ]  obj_ry=+2.5967e-33  t= 0.0111s
+    Polaire      [multistart ]  obj_ry=+4.7348e-23  t= 0.0081s
+
+  n=2    L_adaptatif
+    MDS_Exact    [exact      ]  obj_ry=+3.1974e-53  t= 0.0000s ← ★
+    Standard     [single     ]  obj_ry=+5.3760e-22  t= 0.0030s
+    Reformulee   [single     ]  obj_ry=+5.3764e-22  t= 0.0020s
+    Polaire      [single     ]  obj_ry=+5.3739e-22  t= 0.0039s
+    Standard     [multistart ]  obj_ry=+5.3760e-22  t= 0.0037s
+    Reformulee   [multistart ]  obj_ry=+5.3764e-22  t= 0.0020s
+    Polaire      [multistart ]  obj_ry=+5.3739e-22  t= 0.0039s
+
+  n=3    L_fixe
+    MDS_Exact    [exact      ]  obj_ry=+2.4545e-34  t= 0.0001s ← ★
+    Standard     [single     ]  obj_ry=+5.5609e-08  t= 0.0337s
+    Reformulee   [single     ]  obj_ry=+1.4431e-04  t= 0.0373s
+    Polaire      [single     ]  obj_ry=+1.1222e-20  t= 0.0340s
+    Standard     [multistart ]  obj_ry=+3.6584e-19  t= 0.0517s
+    Reformulee   [multistart ]  obj_ry=+2.2316e-27  t= 0.1036s
+    Polaire      [multistart ]  obj_ry=+1.1222e-20  t= 0.0146s
+
+  n=3    L_adaptatif
+    MDS_Exact    [exact      ]  obj_ry=+2.3570e-42  t= 0.0001s ← ★
+    Standard     [single     ]  obj_ry=+4.4070e-14  t= 0.0035s
+    Reformulee   [single     ]  obj_ry=+4.4070e-14  t= 0.0022s
+    Polaire      [single     ]  obj_ry=+4.4071e-14  t= 0.0038s
+    Standard     [multistart ]  obj_ry=+4.4070e-14  t= 0.0032s
+    Reformulee   [multistart ]  obj_ry=+4.4070e-14  t= 0.0018s
+    Polaire      [multistart ]  obj_ry=+4.4071e-14  t= 0.0037s
+
+
+Résultats sauvegardés : /home/christ/stage_LMA_2026/julia_programming/benchmark_formulations_test_L_huge.csv
+══════════════════════════════════════════════════════════════════════
+
+Génération des graphiques...
+
+Graphique sauvegardé : /home/christ/stage_LMA_2026/julia_programming/benchmark_visualisation_mds_test_L_huge.png
+
+
+══════════════════════════════════════════════════════════════════════
+  BENCHMARK AVEC BRUIT — robustesse des formulations
+══════════════════════════════════════════════════════════════════════
+
+══════════════════════════════════════════════════════════════
+  n=2    |  L_fixe  (L=10.00)
+══════════════════════════════════════════════════════════════
+
+  ── theta_bruit = 0% ──
+    [MDS_Exact   ] err_vrai=+1.881e-37  err_bruit=+1.881e-37  t=0.0103s
+    [Standard    ] err_vrai=+2.288e-12  err_bruit=+2.288e-12  t=0.06s  [ALMOST_LOCALLY_SOLVE]
+    [Reformulee  ] err_vrai=+2.529e-31  err_bruit=+2.529e-31  t=0.01s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+2.114e-22  err_bruit=+2.114e-22  t=0.01s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 1% ──
+    [MDS_Exact   ] err_vrai=+1.042e-11  err_bruit=+2.939e-37  t=0.0000s
+    [Standard    ] err_vrai=+1.947e-10  err_bruit=+1.150e-10  t=0.03s  [ALMOST_LOCALLY_SOLVE]
+    [Reformulee  ] err_vrai=+1.042e-11  err_bruit=+4.089e-28  t=0.01s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+1.042e-11  err_bruit=+2.095e-22  t=0.01s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 5% ──
+    [MDS_Exact   ] err_vrai=+1.478e-10  err_bruit=+5.760e-37  t=0.0000s
+    [Standard    ] err_vrai=+1.044e-09  err_bruit=+4.058e-10  t=0.03s  [ALMOST_LOCALLY_SOLVE]
+    [Reformulee  ] err_vrai=+1.478e-10  err_bruit=+1.555e-34  t=0.01s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+1.478e-10  err_bruit=+2.045e-22  t=0.02s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 10% ──
+    [MDS_Exact   ] err_vrai=+5.465e-10  err_bruit=+4.702e-38  t=0.0000s
+    [Standard    ] err_vrai=+2.063e-08  err_bruit=+1.446e-08  t=0.04s  [ALMOST_LOCALLY_SOLVE]
+    [Reformulee  ] err_vrai=+5.465e-10  err_bruit=+3.428e-35  t=0.01s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+5.465e-10  err_bruit=+2.259e-22  t=0.01s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 20% ──
+    [MDS_Exact   ] err_vrai=+3.921e-12  err_bruit=+7.523e-37  t=0.0000s
+    [Standard    ] err_vrai=+3.941e-12  err_bruit=+2.494e-17  t=0.02s  [ALMOST_LOCALLY_SOLVE]
+    [Reformulee  ] err_vrai=+3.921e-12  err_bruit=+4.954e-32  t=0.01s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+3.921e-12  err_bruit=+2.124e-22  t=0.01s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 30% ──
+    [MDS_Exact   ] err_vrai=+3.919e-09  err_bruit=+7.523e-37  t=0.0000s
+    [Standard    ] err_vrai=+3.723e-08  err_bruit=+6.530e-08  t=0.03s  [ALMOST_LOCALLY_SOLVE]
+    [Reformulee  ] err_vrai=+4.581e-07  err_bruit=+3.773e-07  t=0.01s  [ALMOST_LOCALLY_SOLVE]
+    [Polaire     ] err_vrai=+3.919e-09  err_bruit=+2.537e-22  t=0.01s  [LOCALLY_SOLVED]
+
+══════════════════════════════════════════════════════════════
+  n=2    |  L_adaptatif  (L=141.42)
+══════════════════════════════════════════════════════════════
+
+  ── theta_bruit = 0% ──
+    [MDS_Exact   ] err_vrai=+6.525e-53  err_bruit=+6.525e-53  t=0.0000s
+    [Standard    ] err_vrai=+5.939e-24  err_bruit=+5.939e-24  t=0.00s  [LOCALLY_SOLVED]
+    [Reformulee  ] err_vrai=+5.938e-24  err_bruit=+5.938e-24  t=0.00s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+5.945e-24  err_bruit=+5.945e-24  t=0.00s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 1% ──
+    [MDS_Exact   ] err_vrai=+1.223e-27  err_bruit=+1.631e-53  t=0.0000s
+    [Standard    ] err_vrai=+2.014e-19  err_bruit=+2.015e-19  t=0.00s  [LOCALLY_SOLVED]
+    [Reformulee  ] err_vrai=+2.016e-19  err_bruit=+2.016e-19  t=0.00s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+3.051e-21  err_bruit=+3.055e-21  t=0.00s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 5% ──
+    [MDS_Exact   ] err_vrai=+9.829e-27  err_bruit=+4.715e-53  t=0.0000s
+    [Standard    ] err_vrai=+1.041e-22  err_bruit=+1.021e-22  t=0.00s  [LOCALLY_SOLVED]
+    [Reformulee  ] err_vrai=+1.041e-22  err_bruit=+1.021e-22  t=0.00s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+9.380e-23  err_bruit=+9.189e-23  t=0.00s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 10% ──
+    [MDS_Exact   ] err_vrai=+4.739e-27  err_bruit=+1.321e-53  t=0.0000s
+    [Standard    ] err_vrai=+4.704e-20  err_bruit=+4.707e-20  t=0.00s  [LOCALLY_SOLVED]
+    [Reformulee  ] err_vrai=+4.707e-20  err_bruit=+4.710e-20  t=0.00s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+4.704e-20  err_bruit=+4.707e-20  t=0.00s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 20% ──
+    [MDS_Exact   ] err_vrai=+4.576e-25  err_bruit=+2.349e-53  t=0.0000s
+    [Standard    ] err_vrai=+4.456e-22  err_bruit=+4.175e-22  t=0.00s  [LOCALLY_SOLVED]
+    [Reformulee  ] err_vrai=+4.456e-22  err_bruit=+4.175e-22  t=0.00s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+4.455e-22  err_bruit=+4.174e-22  t=0.00s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 30% ──
+    [MDS_Exact   ] err_vrai=+5.793e-25  err_bruit=+7.896e-53  t=0.0000s
+    [Standard    ] err_vrai=+1.699e-24  err_bruit=+4.262e-24  t=0.00s  [LOCALLY_SOLVED]
+    [Reformulee  ] err_vrai=+1.699e-24  err_bruit=+4.262e-24  t=0.00s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+1.716e-24  err_bruit=+4.290e-24  t=0.00s  [LOCALLY_SOLVED]
+
+══════════════════════════════════════════════════════════════
+  n=3    |  L_fixe  (L=10.00)
+══════════════════════════════════════════════════════════════
+
+  ── theta_bruit = 0% ──
+    [MDS_Exact   ] err_vrai=+7.889e-31  err_bruit=+7.889e-31  t=0.0001s
+    [Standard    ] err_vrai=+1.328e-20  err_bruit=+1.328e-20  t=0.04s  [LOCALLY_SOLVED]
+    [Reformulee  ] err_vrai=+3.155e-30  err_bruit=+3.155e-30  t=0.07s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+7.062e-20  err_bruit=+7.062e-20  t=0.01s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 1% ──
+    [MDS_Exact   ] err_vrai=+2.442e-05  err_bruit=+1.972e-29  t=0.0001s
+    [Standard    ] err_vrai=+2.442e-05  err_bruit=+1.406e-20  t=0.02s  [LOCALLY_SOLVED]
+    [Reformulee  ] err_vrai=+2.442e-05  err_bruit=+2.066e-16  t=0.11s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+2.442e-05  err_bruit=+4.614e-21  t=0.01s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 5% ──
+    [MDS_Exact   ] err_vrai=+1.517e-03  err_bruit=+2.416e-28  t=0.0000s
+    [Standard    ] err_vrai=+1.518e-03  err_bruit=+1.288e-07  t=0.06s  [ALMOST_LOCALLY_SOLVE]
+    [Reformulee  ] err_vrai=+1.517e-03  err_bruit=+4.639e-28  t=0.04s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+1.517e-03  err_bruit=+1.366e-19  t=0.02s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 10% ──
+    [MDS_Exact   ] err_vrai=+3.846e-02  err_bruit=+3.155e-28  t=0.0001s
+    [Standard    ] err_vrai=+3.846e-02  err_bruit=+1.225e-20  t=0.03s  [LOCALLY_SOLVED]
+    [Reformulee  ] err_vrai=+3.846e-02  err_bruit=+1.351e-27  t=0.19s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+3.846e-02  err_bruit=+2.052e-21  t=0.02s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 20% ──
+    [MDS_Exact   ] err_vrai=+1.067e-02  err_bruit=+7.889e-31  t=0.0001s
+    [Standard    ] err_vrai=+1.067e-02  err_bruit=+1.822e-19  t=0.05s  [LOCALLY_SOLVED]
+    [Reformulee  ] err_vrai=+1.067e-02  err_bruit=+8.443e-29  t=0.02s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+1.067e-02  err_bruit=+7.023e-20  t=0.02s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 30% ──
+    [MDS_Exact   ] err_vrai=+6.521e-01  err_bruit=+2.665e-29  t=0.0001s
+    [Standard    ] err_vrai=+6.521e-01  err_bruit=+9.213e-21  t=0.02s  [LOCALLY_SOLVED]
+    [Reformulee  ] err_vrai=+6.521e-01  err_bruit=+1.133e-28  t=0.28s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+6.521e-01  err_bruit=+1.349e-21  t=0.01s  [LOCALLY_SOLVED]
+
+══════════════════════════════════════════════════════════════
+  n=3    |  L_adaptatif  (L=173.21)
+══════════════════════════════════════════════════════════════
+
+  ── theta_bruit = 0% ──
+    [MDS_Exact   ] err_vrai=+5.656e-46  err_bruit=+5.656e-46  t=0.0001s
+    [Standard    ] err_vrai=+9.752e-19  err_bruit=+9.752e-19  t=0.00s  [LOCALLY_SOLVED]
+    [Reformulee  ] err_vrai=+9.741e-19  err_bruit=+9.741e-19  t=0.00s  [SLOW_PROGRESS]
+    [Polaire     ] err_vrai=+9.751e-19  err_bruit=+9.751e-19  t=0.00s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 1% ──
+    [MDS_Exact   ] err_vrai=+1.068e-21  err_bruit=+4.379e-47  t=0.0000s
+    [Standard    ] err_vrai=+2.212e-18  err_bruit=+2.116e-18  t=0.00s  [LOCALLY_SOLVED]
+    [Reformulee  ] err_vrai=+2.212e-18  err_bruit=+2.116e-18  t=0.00s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+2.212e-18  err_bruit=+2.116e-18  t=0.00s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 5% ──
+    [MDS_Exact   ] err_vrai=+6.051e-24  err_bruit=+1.920e-46  t=0.0001s
+    [Standard    ] err_vrai=+2.213e-18  err_bruit=+2.205e-18  t=0.00s  [LOCALLY_SOLVED]
+    [Reformulee  ] err_vrai=+2.213e-18  err_bruit=+2.205e-18  t=0.00s  [SLOW_PROGRESS]
+    [Polaire     ] err_vrai=+2.213e-18  err_bruit=+2.205e-18  t=0.00s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 10% ──
+    [MDS_Exact   ] err_vrai=+3.069e-21  err_bruit=+9.447e-47  t=0.0000s
+    [Standard    ] err_vrai=+1.886e-18  err_bruit=+1.737e-18  t=0.00s  [LOCALLY_SOLVED]
+    [Reformulee  ] err_vrai=+1.886e-18  err_bruit=+1.737e-18  t=0.00s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+1.892e-18  err_bruit=+1.743e-18  t=0.00s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 20% ──
+    [MDS_Exact   ] err_vrai=+2.375e-20  err_bruit=+3.268e-19  t=0.0000s
+    [Standard    ] err_vrai=+1.398e-19  err_bruit=+1.915e-21  t=0.00s  [LOCALLY_SOLVED]
+    [Reformulee  ] err_vrai=+1.419e-19  err_bruit=+1.672e-21  t=0.00s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+1.419e-19  err_bruit=+1.678e-21  t=0.00s  [LOCALLY_SOLVED]
+
+  ── theta_bruit = 30% ──
+    [MDS_Exact   ] err_vrai=+1.279e-18  err_bruit=+1.626e-18  t=0.0000s
+    [Standard    ] err_vrai=+2.197e-18  err_bruit=+2.645e-18  t=0.00s  [LOCALLY_SOLVED]
+    [Reformulee  ] err_vrai=+2.197e-18  err_bruit=+2.645e-18  t=0.00s  [LOCALLY_SOLVED]
+    [Polaire     ] err_vrai=+2.197e-18  err_bruit=+2.645e-18  t=0.00s  [LOCALLY_SOLVED]
+
+
+══════════════════════════════════════════════════════════════════════
+  IMPACT DU BRUIT — err_vs_Qvrai (qualité de reconstruction)
+══════════════════════════════════════════════════════════════════════
+
+  n=2    L_fixe  theta_bruit=0%
+    MDS_Exact     err_vrai=+1.8808e-37 ← ★ MEILLEUR
+    Standard      err_vrai=+2.2877e-12
+    Reformulee    err_vrai=+2.5286e-31
+    Polaire       err_vrai=+2.1138e-22
+
+  n=2    L_fixe  theta_bruit=1%
+    MDS_Exact     err_vrai=+1.0419e-11
+    Standard      err_vrai=+1.9470e-10
+    Reformulee    err_vrai=+1.0419e-11
+    Polaire       err_vrai=+1.0419e-11 ← ★ MEILLEUR
+
+  n=2    L_fixe  theta_bruit=5%
+    MDS_Exact     err_vrai=+1.4785e-10
+    Standard      err_vrai=+1.0436e-09
+    Reformulee    err_vrai=+1.4785e-10
+    Polaire       err_vrai=+1.4785e-10 ← ★ MEILLEUR
+
+  n=2    L_fixe  theta_bruit=10%
+    MDS_Exact     err_vrai=+5.4650e-10 ← ★ MEILLEUR
+    Standard      err_vrai=+2.0631e-08
+    Reformulee    err_vrai=+5.4650e-10
+    Polaire       err_vrai=+5.4650e-10
+
+  n=2    L_fixe  theta_bruit=20%
+    MDS_Exact     err_vrai=+3.9213e-12
+    Standard      err_vrai=+3.9411e-12
+    Reformulee    err_vrai=+3.9213e-12 ← ★ MEILLEUR
+    Polaire       err_vrai=+3.9213e-12
+
+  n=2    L_fixe  theta_bruit=30%
+    MDS_Exact     err_vrai=+3.9188e-09 ← ★ MEILLEUR
+    Standard      err_vrai=+3.7225e-08
+    Reformulee    err_vrai=+4.5813e-07
+    Polaire       err_vrai=+3.9188e-09
+
+  n=2    L_adaptatif  theta_bruit=0%
+    MDS_Exact     err_vrai=+6.5253e-53 ← ★ MEILLEUR
+    Standard      err_vrai=+5.9387e-24
+    Reformulee    err_vrai=+5.9384e-24
+    Polaire       err_vrai=+5.9452e-24
+
+  n=2    L_adaptatif  theta_bruit=1%
+    MDS_Exact     err_vrai=+1.2234e-27 ← ★ MEILLEUR
+    Standard      err_vrai=+2.0143e-19
+    Reformulee    err_vrai=+2.0159e-19
+    Polaire       err_vrai=+3.0513e-21
+
+  n=2    L_adaptatif  theta_bruit=5%
+    MDS_Exact     err_vrai=+9.8289e-27 ← ★ MEILLEUR
+    Standard      err_vrai=+1.0408e-22
+    Reformulee    err_vrai=+1.0409e-22
+    Polaire       err_vrai=+9.3800e-23
+
+  n=2    L_adaptatif  theta_bruit=10%
+    MDS_Exact     err_vrai=+4.7388e-27 ← ★ MEILLEUR
+    Standard      err_vrai=+4.7042e-20
+    Reformulee    err_vrai=+4.7073e-20
+    Polaire       err_vrai=+4.7036e-20
+
+  n=2    L_adaptatif  theta_bruit=20%
+    MDS_Exact     err_vrai=+4.5760e-25 ← ★ MEILLEUR
+    Standard      err_vrai=+4.4559e-22
+    Reformulee    err_vrai=+4.4563e-22
+    Polaire       err_vrai=+4.4545e-22
+
+  n=2    L_adaptatif  theta_bruit=30%
+    MDS_Exact     err_vrai=+5.7931e-25 ← ★ MEILLEUR
+    Standard      err_vrai=+1.6986e-24
+    Reformulee    err_vrai=+1.6986e-24
+    Polaire       err_vrai=+1.7161e-24
+
+  n=3    L_fixe  theta_bruit=0%
+    MDS_Exact     err_vrai=+7.8887e-31 ← ★ MEILLEUR
+    Standard      err_vrai=+1.3281e-20
+    Reformulee    err_vrai=+3.1554e-30
+    Polaire       err_vrai=+7.0625e-20
+
+  n=3    L_fixe  theta_bruit=1%
+    MDS_Exact     err_vrai=+2.4417e-05
+    Standard      err_vrai=+2.4417e-05
+    Reformulee    err_vrai=+2.4417e-05
+    Polaire       err_vrai=+2.4417e-05 ← ★ MEILLEUR
+
+  n=3    L_fixe  theta_bruit=5%
+    MDS_Exact     err_vrai=+1.5175e-03 ← ★ MEILLEUR
+    Standard      err_vrai=+1.5176e-03
+    Reformulee    err_vrai=+1.5175e-03
+    Polaire       err_vrai=+1.5175e-03
+
+  n=3    L_fixe  theta_bruit=10%
+    MDS_Exact     err_vrai=+3.8461e-02 ← ★ MEILLEUR
+    Standard      err_vrai=+3.8461e-02
+    Reformulee    err_vrai=+3.8461e-02
+    Polaire       err_vrai=+3.8461e-02
+
+  n=3    L_fixe  theta_bruit=20%
+    MDS_Exact     err_vrai=+1.0672e-02 ← ★ MEILLEUR
+    Standard      err_vrai=+1.0672e-02
+    Reformulee    err_vrai=+1.0672e-02
+    Polaire       err_vrai=+1.0672e-02
+
+  n=3    L_fixe  theta_bruit=30%
+    MDS_Exact     err_vrai=+6.5211e-01
+    Standard      err_vrai=+6.5211e-01
+    Reformulee    err_vrai=+6.5211e-01 ← ★ MEILLEUR
+    Polaire       err_vrai=+6.5211e-01
+
+  n=3    L_adaptatif  theta_bruit=0%
+    MDS_Exact     err_vrai=+5.6556e-46 ← ★ MEILLEUR
+    Standard      err_vrai=+9.7523e-19
+    Reformulee    err_vrai=+9.7409e-19
+    Polaire       err_vrai=+9.7506e-19
+
+  n=3    L_adaptatif  theta_bruit=1%
+    MDS_Exact     err_vrai=+1.0682e-21 ← ★ MEILLEUR
+    Standard      err_vrai=+2.2123e-18
+    Reformulee    err_vrai=+2.2123e-18
+    Polaire       err_vrai=+2.2123e-18
+
+  n=3    L_adaptatif  theta_bruit=5%
+    MDS_Exact     err_vrai=+6.0511e-24 ← ★ MEILLEUR
+    Standard      err_vrai=+2.2128e-18
+    Reformulee    err_vrai=+2.2128e-18
+    Polaire       err_vrai=+2.2127e-18
+
+  n=3    L_adaptatif  theta_bruit=10%
+    MDS_Exact     err_vrai=+3.0689e-21 ← ★ MEILLEUR
+    Standard      err_vrai=+1.8862e-18
+    Reformulee    err_vrai=+1.8862e-18
+    Polaire       err_vrai=+1.8920e-18
+
+  n=3    L_adaptatif  theta_bruit=20%
+    MDS_Exact     err_vrai=+2.3746e-20 ← ★ MEILLEUR
+    Standard      err_vrai=+1.3978e-19
+    Reformulee    err_vrai=+1.4193e-19
+    Polaire       err_vrai=+1.4188e-19
+
+  n=3    L_adaptatif  theta_bruit=30%
+    MDS_Exact     err_vrai=+1.2794e-18 ← ★ MEILLEUR
+    Standard      err_vrai=+2.1965e-18
+    Reformulee    err_vrai=+2.1965e-18
+    Polaire       err_vrai=+2.1965e-18
+
+
+Résultats bruit sauvegardés : /home/christ/stage_LMA_2026/julia_programming/benchmark_bruit_test.csv
+══════════════════════════════════════════════════════════════════════
+
+Génération des graphiques de bruit...
+Graphique bruit sauvegardé : /home/christ/stage_LMA_2026/julia_programming/benchmark_bruit_vs_vrai.png
+Graphique bruit sauvegardé : /home/christ/stage_LMA_2026/julia_programming/benchmark_bruit_vs_bruit.png
+(base) christ@christ:~/stage_LMA_2026/julia_programming$ julia benchmark_bruit.jl 
+
+══════════════════════════════════════════════════════════════
+  n=3    |  L_fixe  (L=10.00)
+══════════════════════════════════════════════════════════════
+    [MDS_Exact   ] obj_rydberg=+3.674e-34  t= 0.00016s  [EXACT]
+
+  ── Stratégie : single ──
+
+******************************************************************************
+This program contains Ipopt, a library for large-scale nonlinear optimization.
+ Ipopt is released as open source code under the Eclipse Public License (EPL).
+         For more information visit https://github.com/coin-or/Ipopt
+******************************************************************************
+
+    [Standard    ] obj_solver=+5.402e-06  obj_rydberg=+5.402e-06  t=  6.28s  [LOCALLY_SOLVED]
+    [Reformulee  ] obj_solver=-3.098e-22  obj_rydberg=+4.274e-34  t=  0.84s  [LOCALLY_SOLVED]
+    [Polaire     ] obj_solver=+5.402e-06  obj_rydberg=+5.402e-06  t=  5.00s  [ITERATION_LIMIT]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +5.402e-06
+    │  x_sol[Reformulee  ] → err_Rydberg = +4.274e-34
+    │  x_sol[Polaire     ] → err_Rydberg = +5.402e-06
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +3.674e-34
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+  ── Stratégie : multistart ──
+    [Standard    ] obj_solver=+3.975e-09  obj_rydberg=+3.975e-09  t=  0.04s  [ALMOST_LOCALLY_SOLVE]
+    [Reformulee  ] obj_solver=-3.098e-22  obj_rydberg=+4.274e-34  t=  0.01s  [LOCALLY_SOLVED]
+    [Polaire     ] obj_solver=+1.012e-18  obj_rydberg=+1.012e-18  t=  4.35s  [LOCALLY_SOLVED]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +3.975e-09
+    │  x_sol[Reformulee  ] → err_Rydberg = +4.274e-34
+    │  x_sol[Polaire     ] → err_Rydberg = +1.012e-18
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +3.674e-34
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+══════════════════════════════════════════════════════════════
+  n=3    |  L_adaptatif  (L=173.21)
+══════════════════════════════════════════════════════════════
+    [MDS_Exact   ] obj_rydberg=+6.843e-47  t= 0.00004s  [EXACT]
+
+  ── Stratégie : single ──
+    [Standard    ] obj_solver=+2.498e-17  obj_rydberg=+2.498e-17  t=  0.00s  [LOCALLY_SOLVED]
+    [Reformulee  ] obj_solver=+2.498e-17  obj_rydberg=+2.498e-17  t=  0.00s  [SLOW_PROGRESS]
+    [Polaire     ] obj_solver=+2.498e-17  obj_rydberg=+2.498e-17  t=  0.00s  [LOCALLY_SOLVED]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +2.498e-17
+    │  x_sol[Reformulee  ] → err_Rydberg = +2.498e-17
+    │  x_sol[Polaire     ] → err_Rydberg = +2.498e-17
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +6.843e-47
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+  ── Stratégie : multistart ──
+    [Standard    ] obj_solver=+2.498e-17  obj_rydberg=+2.498e-17  t=  0.00s  [LOCALLY_SOLVED]
+    [Reformulee  ] obj_solver=+2.498e-17  obj_rydberg=+2.498e-17  t=  0.00s  [SLOW_PROGRESS]
+    [Polaire     ] obj_solver=+2.498e-17  obj_rydberg=+2.498e-17  t=  0.00s  [LOCALLY_SOLVED]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +2.498e-17
+    │  x_sol[Reformulee  ] → err_Rydberg = +2.498e-17
+    │  x_sol[Polaire     ] → err_Rydberg = +2.498e-17
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +6.843e-47
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+══════════════════════════════════════════════════════════════
+  n=10   |  L_fixe  (L=10.00)
+══════════════════════════════════════════════════════════════
+    [MDS_Exact   ] obj_rydberg=+4.458e-28  t= 0.00008s  [EXACT]
+
+  ── Stratégie : single ──
+    [Standard    ] obj_solver=+Inf  obj_rydberg=+Inf  t=  0.27s  [ÉCHE]
+    [Reformulee  ] obj_solver=+4.234e-04  obj_rydberg=+4.234e-04  t=  2.70s  [ALMOST_LOCALLY_SOLVE]
+    [Polaire     ] obj_solver=+1.201e-04  obj_rydberg=+1.201e-04  t=  0.20s  [ALMOST_LOCALLY_SOLVE]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +Inf
+    │  x_sol[Reformulee  ] → err_Rydberg = +4.234e-04
+    │  x_sol[Polaire     ] → err_Rydberg = +1.201e-04
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +4.458e-28
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+  ── Stratégie : multistart ──
+    [Standard    ] obj_solver=+1.115e-02  obj_rydberg=+1.115e-02  t=  0.65s  [ALMOST_LOCALLY_SOLVE]
+    [Reformulee  ] obj_solver=+4.234e-04  obj_rydberg=+4.234e-04  t=  5.88s  [ALMOST_LOCALLY_SOLVE]
+    [Polaire     ] obj_solver=+1.201e-04  obj_rydberg=+1.201e-04  t=  1.85s  [ALMOST_LOCALLY_SOLVE]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +1.115e-02
+    │  x_sol[Reformulee  ] → err_Rydberg = +4.234e-04
+    │  x_sol[Polaire     ] → err_Rydberg = +1.201e-04
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +4.458e-28
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+══════════════════════════════════════════════════════════════
+  n=10   |  L_adaptatif  (L=316.23)
+══════════════════════════════════════════════════════════════
+    [MDS_Exact   ] obj_rydberg=+2.461e-36  t= 0.00006s  [EXACT]
+
+  ── Stratégie : single ──
+    [Standard    ] obj_solver=+6.562e-10  obj_rydberg=+6.562e-10  t=  0.01s  [LOCALLY_SOLVED]
+    [Reformulee  ] obj_solver=+6.562e-10  obj_rydberg=+6.562e-10  t= 13.89s  [ITERATION_LIMIT]
+    [Polaire     ] obj_solver=+6.562e-10  obj_rydberg=+6.562e-10  t=  0.01s  [LOCALLY_SOLVED]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +6.562e-10
+    │  x_sol[Reformulee  ] → err_Rydberg = +6.562e-10
+    │  x_sol[Polaire     ] → err_Rydberg = +6.562e-10
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +2.461e-36
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+  ── Stratégie : multistart ──
+    [Standard    ] obj_solver=+6.562e-10  obj_rydberg=+6.562e-10  t=  0.03s  [LOCALLY_SOLVED]
+    [Reformulee  ] obj_solver=+6.562e-10  obj_rydberg=+6.562e-10  t= 64.71s  [ITERATION_LIMIT]
+    [Polaire     ] obj_solver=+6.562e-10  obj_rydberg=+6.562e-10  t=  0.05s  [LOCALLY_SOLVED]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +6.562e-10
+    │  x_sol[Reformulee  ] → err_Rydberg = +6.562e-10
+    │  x_sol[Polaire     ] → err_Rydberg = +6.562e-10
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +2.461e-36
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+══════════════════════════════════════════════════════════════
+  n=20   |  L_fixe  (L=10.00)
+══════════════════════════════════════════════════════════════
+    [MDS_Exact   ] obj_rydberg=+4.969e-17  t= 0.00008s  [EXACT]
+
+  ── Stratégie : single ──
+    [Standard    ] obj_solver=+Inf  obj_rydberg=+Inf  t=  0.45s  [ÉCHE]
+    [Reformulee  ] obj_solver=+7.639e+10  obj_rydberg=+7.639e+10  t= 29.09s  [ITERATION_LIMIT]
+    [Polaire     ] obj_solver=+1.125e+08  obj_rydberg=+1.125e+08  t=  0.35s  [ALMOST_LOCALLY_SOLVE]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +Inf
+    │  x_sol[Reformulee  ] → err_Rydberg = +7.639e+10
+    │  x_sol[Polaire     ] → err_Rydberg = +1.125e+08
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +4.969e-17
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+  ── Stratégie : multistart ──
+    [Standard    ] obj_solver=+7.640e+10  obj_rydberg=+7.640e+10  t=  1.14s  [LOCALLY_SOLVED]
+    [Reformulee  ] obj_solver=+1.158e+07  obj_rydberg=+1.158e+07  t= 53.34s  [ALMOST_LOCALLY_SOLVE]
+    [Polaire     ] obj_solver=+2.720e+02  obj_rydberg=+2.720e+02  t=  1.51s  [ALMOST_LOCALLY_SOLVE]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +7.640e+10
+    │  x_sol[Reformulee  ] → err_Rydberg = +1.158e+07
+    │  x_sol[Polaire     ] → err_Rydberg = +2.720e+02
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +4.969e-17
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+══════════════════════════════════════════════════════════════
+  n=20   |  L_adaptatif  (L=447.21)
+══════════════════════════════════════════════════════════════
+    [MDS_Exact   ] obj_rydberg=+4.179e-41  t= 0.00008s  [EXACT]
+
+  ── Stratégie : single ──
+    [Standard    ] obj_solver=+4.856e-14  obj_rydberg=+4.856e-14  t=  0.02s  [LOCALLY_SOLVED]
+    [Reformulee  ] obj_solver=+Inf  obj_rydberg=+Inf  t=  7.12s  [ÉCHE]
+    [Polaire     ] obj_solver=+4.761e-14  obj_rydberg=+4.761e-14  t=  0.03s  [LOCALLY_SOLVED]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +4.856e-14
+    │  x_sol[Reformulee  ] → err_Rydberg = +Inf
+    │  x_sol[Polaire     ] → err_Rydberg = +4.761e-14
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +4.179e-41
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+  ── Stratégie : multistart ──
+    [Standard    ] obj_solver=+4.856e-14  obj_rydberg=+4.856e-14  t=  0.02s  [LOCALLY_SOLVED]
+    [Reformulee  ] obj_solver=+4.654e-14  obj_rydberg=+4.654e-14  t= 47.39s  [ITERATION_LIMIT]
+    [Polaire     ] obj_solver=+4.761e-14  obj_rydberg=+4.761e-14  t=  0.03s  [LOCALLY_SOLVED]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +4.856e-14
+    │  x_sol[Reformulee  ] → err_Rydberg = +4.654e-14
+    │  x_sol[Polaire     ] → err_Rydberg = +4.761e-14
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +4.179e-41
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+══════════════════════════════════════════════════════════════
+  n=50   |  L_fixe  (L=10.00)
+══════════════════════════════════════════════════════════════
+    [MDS_Exact   ] obj_rydberg=+1.486e-16  t= 0.00487s  [EXACT]
+
+  ── Stratégie : single ──
+    [Standard    ] obj_solver=+7.572e+10  obj_rydberg=+7.572e+10  t=  1.09s  [LOCALLY_SOLVED]
+    [Reformulee  ] obj_solver=+7.333e+10  obj_rydberg=+7.333e+10  t= 84.66s  [ITERATION_LIMIT]
+    [Polaire     ] obj_solver=+9.128e+05  obj_rydberg=+9.128e+05  t= 90.54s  [ALMOST_LOCALLY_SOLVE]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +7.572e+10
+    │  x_sol[Reformulee  ] → err_Rydberg = +7.333e+10
+    │  x_sol[Polaire     ] → err_Rydberg = +9.128e+05
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +1.486e-16
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+  ── Stratégie : multistart ──
+    [Standard    ] obj_solver=+7.572e+10  obj_rydberg=+7.572e+10  t=  2.88s  [LOCALLY_SOLVED]
+    [Reformulee  ] obj_solver=+7.714e+09  obj_rydberg=+7.722e+09  t=173.15s  [ITERATION_LIMIT]
+    [Polaire     ] obj_solver=+9.128e+05  obj_rydberg=+9.128e+05  t=102.30s  [ALMOST_LOCALLY_SOLVE]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +7.572e+10
+    │  x_sol[Reformulee  ] → err_Rydberg = +7.722e+09
+    │  x_sol[Polaire     ] → err_Rydberg = +9.128e+05
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +1.486e-16
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+══════════════════════════════════════════════════════════════
+  n=50   |  L_adaptatif  (L=707.11)
+══════════════════════════════════════════════════════════════
+    [MDS_Exact   ] obj_rydberg=+5.480e-42  t= 0.00019s  [EXACT]
+
+  ── Stratégie : single ──
+    [Standard    ] obj_solver=+2.953e-10  obj_rydberg=+2.953e-10  t=  0.35s  [ALMOST_LOCALLY_SOLVE]
+    [Reformulee  ] obj_solver=+Inf  obj_rydberg=+Inf  t=205.62s  [ÉCHE]
+    [Polaire     ] obj_solver=+6.045e-14  obj_rydberg=+6.045e-14  t=  0.99s  [ALMOST_LOCALLY_SOLVE]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +2.953e-10
+    │  x_sol[Reformulee  ] → err_Rydberg = +Inf
+    │  x_sol[Polaire     ] → err_Rydberg = +6.045e-14
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +5.480e-42
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+  ── Stratégie : multistart ──
+    [Standard    ] obj_solver=+7.848e-14  obj_rydberg=+7.848e-14  t=  0.45s  [LOCALLY_SOLVED]
+    [Reformulee  ] obj_solver=+7.902e-14  obj_rydberg=+7.902e-14  t=498.36s  [ITERATION_LIMIT]
+    [Polaire     ] obj_solver=+6.045e-14  obj_rydberg=+6.045e-14  t=  0.75s  [ALMOST_LOCALLY_SOLVE]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +7.848e-14
+    │  x_sol[Reformulee  ] → err_Rydberg = +7.902e-14
+    │  x_sol[Polaire     ] → err_Rydberg = +6.045e-14
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +5.480e-42
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+══════════════════════════════════════════════════════════════
+  n=100  |  L_fixe  (L=10.00)
+══════════════════════════════════════════════════════════════
+    [MDS_Exact   ] obj_rydberg=+6.457e-13  t= 0.01237s  [EXACT]
+
+  ── Stratégie : single ──
+    [Standard    ] obj_solver=+2.645e+13  obj_rydberg=+2.645e+13  t=962.08s  [ITERATION_LIMIT]
+    [Reformulee  ] obj_solver=+1.171e+14  obj_rydberg=+1.171e+14  t=458.21s  [ITERATION_LIMIT]
+    [Polaire     ] obj_solver=+1.895e+12  obj_rydberg=+1.895e+12  t=5807.80s  [ALMOST_LOCALLY_SOLVE]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +2.645e+13
+    │  x_sol[Reformulee  ] → err_Rydberg = +1.171e+14
+    │  x_sol[Polaire     ] → err_Rydberg = +1.895e+12
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +6.457e-13
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+  ── Stratégie : multistart ──
+    [Standard    ] obj_solver=+2.645e+13  obj_rydberg=+2.645e+13  t=1366.64s  [ITERATION_LIMIT]
+    [Reformulee  ] obj_solver=+1.171e+14  obj_rydberg=+1.171e+14  t=1024.62s  [ITERATION_LIMIT]
+    [Polaire     ] obj_solver=+1.895e+12  obj_rydberg=+1.895e+12  t=8908.63s  [ALMOST_LOCALLY_SOLVE]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +2.645e+13
+    │  x_sol[Reformulee  ] → err_Rydberg = +1.171e+14
+    │  x_sol[Polaire     ] → err_Rydberg = +1.895e+12
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +6.457e-13
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+══════════════════════════════════════════════════════════════
+  n=100  |  L_adaptatif  (L=1000.00)
+══════════════════════════════════════════════════════════════
+    [MDS_Exact   ] obj_rydberg=+3.198e-35  t= 0.02151s  [EXACT]
+
+  ── Stratégie : single ──
+    [Standard    ] obj_solver=+1.106e-09  obj_rydberg=+1.106e-09  t=  1.85s  [LOCALLY_SOLVED]
+    [Reformulee  ] obj_solver=+1.106e-09  obj_rydberg=+1.106e-09  t=12052.64s  [ITERATION_LIMIT]
+    [Polaire     ] obj_solver=+Inf  obj_rydberg=+Inf  t= 28.13s  [ÉCHE]
+
+    ┌── Injection croisée ──────────────────────────┐
+    │  x_sol[Standard    ] → err_Rydberg = +1.106e-09
+    │  x_sol[Reformulee  ] → err_Rydberg = +1.106e-09
+    │  x_sol[Polaire     ] → err_Rydberg = +Inf
+    │  x_sol[MDS_Exact   ] → err_Rydberg = +3.198e-35
+    │  → GAGNANT : MDS_Exact
+    └──────────────────────────────────────────────────┘
+
+  ── Stratégie : multistart ──
+    [Standard    ] obj_solver=+1.106e-09  obj_rydberg=+1.106e-09  t=  4.56s  [LOCALLY_SOLVED]
+^C

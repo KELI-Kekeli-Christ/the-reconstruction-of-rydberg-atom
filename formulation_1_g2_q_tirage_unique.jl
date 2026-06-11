@@ -6,7 +6,7 @@ Pkg.add("DataFrames")
 using JuMP, Ipopt, LinearAlgebra, StatsBase, CSV, DataFrames
 
 # --- Paramètres ---
-n_values   = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]  # n <= 50 et n > 50
+n_values   = [10, 20, 30,40,50]  # n <= 50 et n > 50
 limit_dim  = 2
 n_starts   = 10
 L          = 10
@@ -38,9 +38,7 @@ for n in n_values
         # Trois stratégies de grille
         g_cases = [
             ("2sqrt(n)", ceil(Int, 2 * sqrt(n))),
-            ("sqrt(n)",  ceil(Int,     sqrt(n))),
-            ("sqrt(n)/2", max(2, ceil(Int, sqrt(n) / 2))),
-        ]
+            ("sqrt(n)",  ceil(Int,     sqrt(n)))        ]
 
         for (g_label, g) in g_cases
             nb_intersections = g^dim
@@ -69,7 +67,7 @@ for n in n_values
                 model = Model(Ipopt.Optimizer)
                 set_optimizer_attribute(model, "print_level", 0)
 
-                @variable(model, x_opt[1:n, 1:dim] >= 0)
+                @variable(model, x_opt[1:n, 1:dim] >=0)
 
                 chosen_points = sample(all_intersections, n, replace=false)
                 for i in 1:n
@@ -97,7 +95,7 @@ for n in n_values
     end
 end
 
-csv_path = joinpath(@__DIR__, "results_compare_g.csv")
+csv_path = joinpath(@__DIR__, "results_compare_g1.csv")
 CSV.write(csv_path, results)
 println("\nResultats sauvegardes dans : $csv_path")
 println(results)
