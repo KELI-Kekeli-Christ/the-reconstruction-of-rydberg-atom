@@ -3,16 +3,16 @@ using Ipopt
 using LinearAlgebra
 using Statistics
 
-n = 5
+n = 3
 c6 = 1
-L = sqrt(n)
+L = 1
 dim = 2
 
 # Generate initial reference points
 x_ref = rand(n, dim) * L
 
 for i in 1:n, j in i+1:n
-    while norm(x_ref[i,:] - x_ref[j,:]) < 1
+    while norm(x_ref[i,:] - x_ref[j,:]) < 0.3
         x_ref[i,:] = rand(dim) * L
     end
 end
@@ -24,6 +24,9 @@ for i in 1:n, j in i+1:n
     Q_target[i,j] = c6 / (d^6)
     Q_target[j,i] = Q_target[i,j]
 end
+
+
+
 
 # Initialize Model
 model = Model(Ipopt.Optimizer)
@@ -93,6 +96,29 @@ optimize!(model)
 # Check status
 println("Termination Status: ", termination_status(model))
 println("Objective Value: ", objective_value(model))
-println("Solution x: ", value.(x))
 
 
+# Solution trouvée
+x_sol = value.(x)
+
+# RMSE sur les distances
+function rmse_distances(x_sol, x_ref)
+    n = size(x_ref, 1)
+
+    err = 0.0
+    count = 0
+
+    for i in 1:n, j in i+1:n
+        d_sol = norm(x_sol[i,:] - x_sol[j,:])
+        d_ref = norm(x_ref[i,:] - x_ref[j,:])
+
+        err += (d_sol - d_ref)^2
+        count += 1
+    end
+
+    return sqrt(err / count)
+end
+
+rmse_d = rmse_distances(x_sol, x_ref)
+
+println("RMSE distances = ", rmse_d)

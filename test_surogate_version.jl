@@ -1,6 +1,6 @@
 using JuMP, Ipopt, LinearAlgebra,Statistics
 
-n = 3
+n = 10
 c6 = 1
 L = sqrt(n)
 dim = 2

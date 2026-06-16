@@ -1,0 +1,702 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+% \usepackage[french]{babel}  % activer si disponible
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\tcbuselibrary{theorems, skins, breakable}
+
+\geometry{left=2.5cm, right=2.5cm, top=3cm, bottom=3cm}
+
+% ── Couleurs ──────────────────────────────────────────────────────────────────
+\definecolor{bleu}{RGB}{30,90,180}
+\definecolor{vert}{RGB}{0,130,80}
+\definecolor{rouge}{RGB}{180,40,40}
+\definecolor{gris}{RGB}{245,245,250}
+\definecolor{orange}{RGB}{200,100,0}
+\definecolor{violet}{RGB}{100,30,160}
+\definecolor{contrainteBleu}{HTML}{0070C0}
+\definecolor{contrainteOrange}{HTML}{E37222}
+\definecolor{contrainteRose}{HTML}{C000C0}
+\definecolor{contrainteVert}{HTML}{008000}
+
+% ── Environnements ────────────────────────────────────────────────────────────
+\newtcbtheorem[number within=section]{theoreme}{Théorème}%
+  {colback=bleu!6, colframe=bleu!70!black, fonttitle=\bfseries, breakable}{thm}
+
+\newtcbtheorem[number within=section]{proposition}{Proposition}%
+  {colback=vert!6, colframe=vert!70!black, fonttitle=\bfseries, breakable}{prop}
+
+\newtcbtheorem[number within=section]{remarque}{Remarque}%
+  {colback=orange!6, colframe=orange!70!black, fonttitle=\bfseries, breakable}{rem}
+
+\newtcbtheorem[number within=section]{definition}{Définition}%
+  {colback=violet!6, colframe=violet!70!black, fonttitle=\bfseries, breakable}{def}
+
+\tcbset{pipeline/.style={
+  enhanced, breakable,
+  colback=gris, colframe=bleu!50,
+  title style={fill=bleu!80!black},
+  fonttitle=\bfseries\color{white},
+  boxrule=0.8pt, arc=4pt
+}}
+
+\newtcolorbox{objetifbox}{
+  enhanced, breakable,
+  colback=gris, colframe=bleu!60,
+  arc=4pt, boxrule=0.8pt,
+  left=6pt, right=6pt
+}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{bleu}\bfseries,
+  commentstyle=\color{vert!70!black}\itshape,
+  stringstyle=\color{rouge},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  frame=single,
+  backgroundcolor=\color{gris},
+  breaklines=true,
+  columns=fullflexible
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\textcolor{bleu}{\small Benchmark Rydberg --- Stage LMA 2026}}
+\lhead{\textcolor{gray}{\small \texttt{benchmark\_bruit.jl}}}
+\rfoot{\thepage}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+
+\title{%
+  \vspace{-1cm}
+  {\large\textcolor{bleu}{\textsc{Stage LMA 2026}}}\\[0.4cm]
+  {\LARGE\bfseries Reconstruction de positions d'atomes de Rydberg}\\[0.3cm]
+  {\large\textcolor{bleu!70!black}%
+    {Benchmark complet : six formulations, trois échelles $L$, MDS et bruit}}\\[0.3cm]
+  \rule{\linewidth}{0.5pt}
+}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\begin{abstract}
+\noindent
+Ce rapport synthétise l'ensemble du travail réalisé dans
+\texttt{benchmark\_bruit.jl} : reconstruction des positions de $n$ atomes
+de Rydberg à partir de la matrice d'interactions $Q_{ij} = C_6/r_{ij}^6$.
+Nous présentons rigoureusement le modèle physique, l'analyse de sensibilité,
+le choix de l'échelle $L$, le pipeline MDS généralisé, puis \textbf{six}
+méthodes de reconstruction (Standard, Reformulée, Polaire, Surogate,
+Quadratique, MDS exact), le protocole expérimental (trois types de $L$,
+multistart, bruit) et les métriques d'évaluation (erreur Rydberg et
+RMSE sur les distances). Chaque étape mathématique est détaillée et
+illustrée sur un exemple $n=2$.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+% ==============================================================================
+\section{Modèle physique et problème inverse}
+% ==============================================================================
+
+\subsection{Le potentiel de van der Waals}
+
+Deux atomes de Rydberg en $\mathbf{x}_i, \mathbf{x}_j \in \R^2$ interagissent via :
+\begin{equation}\label{eq:rydberg}
+  \boxed{Q_{ij} = \frac{C_6}{r_{ij}^6}}, \qquad
+  r_{ij} := \norm{\mathbf{x}_i - \mathbf{x}_j}_2,
+\end{equation}
+avec $C_6 > 0$ (dans le code : \texttt{c6 = 1.0}).
+
+\textbf{Pourquoi l'exposant $-6$ ?}
+Le couplage dipôle--dipôle entre états de Rydberg décroît comme $1/r^3$ en amplitude ;
+l'énergie d'interaction effective (proportional à l'amplitude au carré) décroît donc
+comme $1/r^6$. C'est cette loi qui fixe la structure non linéaire du problème inverse.
+
+\subsection{Problème inverse}
+
+\textbf{Donnée :} matrice symétrique $Q \in \R^{n\times n}$, $Q_{ii}=0$, $Q_{ij}>0$.
+
+\textbf{Inconnues :} positions $\mathbf{x}_1,\ldots,\mathbf{x}_n \in \R^2$.
+
+\textbf{Objectif :} trouver $\mathbf{x}$ tel que \eqref{eq:rydberg} soit satisfait
+(ou approché au mieux en moindres carrés).
+
+\begin{remarque}{Invariances géométriques}{inv}
+Le problème est invariant par translation, rotation et réflexion :
+si $\mathbf{x}$ est solution, alors $R\mathbf{x} + \mathbf{t}$ l'est aussi
+(pour $R$ orthogonale, $\mathbf{t}$ translation).
+La métrique \textbf{RMSE sur les distances} est donc plus pertinente que
+la comparaison directe des coordonnées.
+\end{remarque}
+
+% ==============================================================================
+\section{Sensibilité et mal-conditionnement}
+% ==============================================================================
+
+\subsection{Propagation directe : erreur sur $Q$ due à une erreur sur $d$}
+
+On dérive $Q(d) = C_6 d^{-6}$ :
+\[
+  \frac{dQ}{dd} = -6 C_6 d^{-7}.
+\]
+Pour une petite perturbation $\delta d$ :
+\[
+  \delta Q \approx -6 C_6 d^{-7}\,\delta d
+  \quad\Rightarrow\quad
+  \frac{\delta Q}{Q} = \frac{\delta Q}{C_6 d^{-6}}
+  = -6\,\frac{\delta d}{d}.
+\]
+\begin{equation}\label{eq:sens-direct}
+  \boxed{\left|\frac{\delta Q}{Q}\right| = 6\left|\frac{\delta d}{d}\right|.}
+\end{equation}
+
+\textbf{Exemple numérique :} si $d = 1$ et $\delta d/d = 1\%$, alors
+$|\delta Q/Q| \approx 6\%$. Une erreur relative de $1\%$ sur la distance
+se transforme en $6\%$ sur l'interaction.
+
+\subsection{Propagation inverse : erreur sur $d$ due à une erreur sur $Q$}
+
+On inverse $d = (C_6/Q)^{1/6}$ :
+\[
+  \frac{dd}{dQ} = -\frac{1}{6} C_6^{1/6} Q^{-7/6},
+  \qquad
+  \frac{\delta d}{d} \approx -\frac{1}{6}\,\frac{\delta Q}{Q}.
+\]
+\begin{equation}\label{eq:sens-inverse}
+  \boxed{\left|\frac{\delta d}{d}\right| \approx \frac{1}{6}\left|\frac{\delta Q}{Q}\right|.}
+\end{equation}
+
+\textbf{Exemple :} bruit de $30\%$ sur $Q$ $\Rightarrow$ erreur relative
+$\sim 5\%$ sur $d$ \emph{en première approximation linéaire}.
+Mais voir ci-dessous le régime non linéaire.
+
+\subsection{Régime critique : grandes distances}
+
+Quand $d \to \infty$, on a $Q \to 0^+$ et $Q^{-7/6} \to +\infty$.
+Une infime perturbation $\delta Q$ sur une interaction faible produit
+une énorme incertitude sur $d$ :
+\[
+  \boxed{\text{Le problème inverse est mal conditionné pour les paires éloignées.}}
+\]
+
+\textbf{Conséquence pratique :} les formulations NLP et le MDS sont très
+sensibles aux paires $(i,j)$ avec $Q_{ij}$ petit (atomes lointains).
+
+% ==============================================================================
+\section{Choix de l'échelle $L$}
+% ==============================================================================
+
+\subsection{Rôle de $L$ dans le benchmark}
+
+Dans \texttt{benchmark\_bruit.jl}, $L$ contrôle :
+\begin{itemize}[leftmargin=2em]
+  \item la \textbf{génération} des positions de référence
+    $\mathbf{x}_i \in [0,L]^d$ (via \texttt{generer\_init}) ;
+  \item les \textbf{bornes} $0 \leq x_{ik} \leq L$ pour Surogate et Quadratique ;
+  \item la qualité des \textbf{points de départ} Ipopt (multistart).
+\end{itemize}
+
+\subsection{Trois stratégies implémentées}
+
+\begin{center}
+\begin{tabular}{lll}
+  \toprule
+  \textbf{Nom} & \textbf{Formule} & \textbf{Intuition} \\
+  \midrule
+  \texttt{L\_fixe}      & $L = 10$               & Échelle constante, référence simple \\
+  \texttt{L\_adaptatif} & $L = 100\sqrt{n}$      & Croît avec $n$ (plus d'atomes $\Rightarrow$ plus d'espace) \\
+  \texttt{L\_optimal}   & $L = (C_6/Q_{\max})^{1/6}$ & Échelle liée à la \emph{plus courte} distance \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+où $Q_{\max} = \max_{i<j} Q_{ij}$ correspond à la paire la plus proche
+($r_{\min} = (C_6/Q_{\max})^{1/6}$).
+
+\subsection{Dérivation de $L_{\mathrm{optimal}}$}
+
+On impose que les interactions restent dans une zone informative :
+\[
+  Q_{\min} \leq Q_{ij} \leq Q_{\max}.
+\]
+Comme $Q_{ij} = C_6/d_{ij}^6$ :
+\[
+  d_{\max} \leq \left(\frac{C_6}{Q_{\min}}\right)^{1/6},
+  \qquad
+  d_{\min} \geq \left(\frac{C_6}{Q_{\max}}\right)^{1/6}.
+\]
+En dimension $d=2$, si les atomes sont répartis dans une boîte $[0,L]^2$,
+on a approximativement $d_{\max} \sim \sqrt{2}\,L$.
+
+\textbf{Version empirique (implémentée)} : on utilise directement la
+plus forte interaction observée :
+\[
+  \boxed{L_{\mathrm{optimal}} = \left(\frac{C_6}{\max_{i<j} Q_{ij}}\right)^{1/6}
+  = r_{\min}.}
+\]
+C'est l'échelle de la \textbf{distance minimale} entre atomes.
+Elle garantit que la boîte $[0,L]^2$ contient au minimum la séparation
+physique la plus contrainte.
+
+\begin{remarque}{Procédure \texttt{L\_optimal} dans le code}{lopt}
+Pour \texttt{L\_optimal}, on génère d'abord une géométrie avec
+\texttt{L\_SEED = 10.0}, on construit $Q$, puis on calcule
+$L = (C_6/\max Q)^{1/6}$ et on régénère les initialisations avec ce $L$.
+\end{remarque}
+
+\subsection{Interprétation comparative}
+
+\begin{itemize}[leftmargin=2em]
+  \item $L \ll L_{\mathrm{optimal}}$ : boîte trop petite, contraintes
+    $0 \leq x \leq L$ conflictuelles avec la géométrie vraie.
+  \item $L \gg L_{\mathrm{optimal}}$ : $Q_{ij}$ très petits pour les paires
+    éloignées, perte d'information (cf.\ section~\ref{eq:sens-inverse}).
+  \item \texttt{L\_adaptatif} ($100\sqrt{n}$) peut être très grand
+    (ex.\ $n=100 \Rightarrow L \approx 1000$), ce qui dégrade parfois
+    les solveurs NLP malgré une bonne reconstruction MDS.
+\end{itemize}
+
+% ==============================================================================
+\section{Métriques d'évaluation}
+% ==============================================================================
+
+\subsection{Erreur Rydberg (métrique universelle)}
+
+Pour une solution $\hat{\mathbf{x}}$ et une matrice cible $Q$ :
+\[
+  \mathcal{E}_{\mathrm{Ryd}}(\hat{\mathbf{x}}, Q)
+  := \sum_{i<j}\left(\frac{C_6}{\norm{\hat{\mathbf{x}}_i-\hat{\mathbf{x}}_j}^6} - Q_{ij}\right)^2.
+\]
+Cette métrique mesure directement la fidélité au modèle physique,
+indépendamment de la formulation utilisée.
+
+\subsection{RMSE sur les distances}
+
+Comparée à la géométrie de référence $\mathbf{x}^{\mathrm{ref}}$ :
+\[
+  \mathrm{RMSE}_{\mathrm{dist}}
+  := \sqrt{\frac{1}{\binom{n}{2}}\sum_{i<j}
+  \left(\norm{\hat{\mathbf{x}}_i-\hat{\mathbf{x}}_j}
+       -\norm{\mathbf{x}^{\mathrm{ref}}_i-\mathbf{x}^{\mathrm{ref}}_j\right)^2}.
+\]
+\textbf{Pourquoi cette métrique ?} Elle est invariante par isométrie
+(translation/rotation/réflexion) et mesure la qualité géométrique
+réelle de la reconstruction.
+
+% ==============================================================================
+\section{MDS généralisé (méthode exacte algébrique)}
+% ==============================================================================
+
+\subsection{Étape A --- Inversion exacte $Q \to r_{ij}$}
+
+De \eqref{eq:rydberg} :
+\[
+  r_{ij} = \left(\frac{C_6}{Q_{ij}}\right)^{1/6},
+  \qquad
+  D^2_{ij} := r_{ij}^2 = \left(\frac{C_6}{Q_{ij}}\right)^{1/3}.
+\]
+
+\textbf{Exemple $n=2$, $r_{12}=3$, $C_6=1$ :}
+$Q_{12} = 1/3^6 = 1/729 \approx 1.37\times 10^{-3}$,
+$r_{12} = (729)^{1/6} = 3$. $\checkmark$
+
+\subsection{Étape B --- Double centrage de Gower}
+
+\[
+  H = I_n - \frac{1}{n}\mathbf{1}\mathbf{1}^\top,
+  \qquad
+  B = -\frac{1}{2}\,H D^2 H.
+\]
+\textbf{Pourquoi centrer ?} Le théorème de Young--Householder relie
+$B_{ij} = \mathbf{x}_i^\top\mathbf{x}_j$ (points centrés) aux distances.
+Sans centrage, on perd l'information de position absolue (invariance
+par translation).
+
+\subsection{Étape C --- Décomposition spectrale}
+
+$B = V\Lambda V^\top$, $\lambda_1 \geq \cdots \geq \lambda_n$.
+
+\subsection{Étape D --- Projection PSD}
+
+Si $\lambda_k < 0$ (bruit), on pose $\lambda_k^+ = \max(\lambda_k, 0)$.
+\[
+  B^+ = V\,\mathrm{diag}(\lambda_1^+,\ldots,\lambda_n^+)\,V^\top
+\]
+est la meilleure approximation PSD de $B$ au sens de Frobenius.
+
+\subsection{Étape E --- Embedding 2D}
+
+\[
+  X = V_{:,1:2}\,\mathrm{diag}(\sqrt{\lambda_1^+},\sqrt{\lambda_2^+})
+  \in \R^{n\times 2}.
+\]
+
+\begin{tcolorbox}[pipeline, title=Pipeline MDS Rydberg (\texttt{solve\_mds})]
+$Q \xrightarrow{\;t\mapsto (C_6/t)^{1/3}\;} D^2
+\xrightarrow{\;\text{Gower}\;} B
+\xrightarrow{\;\text{proj.\ PSD}\;} B^+
+\xrightarrow{\;\text{top-2}\;} X \in \R^{n\times 2}$
+\end{tcolorbox}
+
+\textbf{Complexité :} $\mathcal{O}(n^3)$, sans itération, solution globale
+si $Q$ est exact et euclidien.
+
+% ==============================================================================
+\section{Formulations NLP : catalogue complet}
+% ==============================================================================
+
+Toutes les formulations NLP minimisent un résidu quadratique sur $Q$
+et sont résolues par \textbf{Ipopt} (points intérieurs, tolérance $10^{-12}$).
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Formulation Standard}
+% ─────────────────────────────────────────────────────────────────────────────
+
+Variables : $\mathbf{x} \in \R^{n\times d}$ (libres, sans borne).
+
+On pose $d_{ij}^2 = \norm{\mathbf{x}_i-\mathbf{x}_j}^2$ et on minimise :
+\[
+  \min_{\mathbf{x}} \sum_{i<j}\left(\frac{C_6}{(d_{ij}^2)^3} - Q_{ij}\right)^2
+  = \sum_{i<j}\left(\frac{C_6}{d_{ij}^6} - Q_{ij}\right)^2,
+\]
+avec contrainte physique $d_{ij}^2 \geq z_{\min}$ (évite $d\to 0$).
+
+\textbf{Pourquoi réécrire $1/d^6$ comme $1/(d^2)^3$ ?}
+JuMP gère mieux les expressions polynomiales en $d_{ij}^2$ ;
+numériquement, on évite de calculer $d_{ij}$ puis de l'élever à $-6$
+(division instable).
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Formulation Reformulée}
+% ─────────────────────────────────────────────────────────────────────────────
+
+Variables auxiliaires par paire $(i,j)$ :
+\[
+  z_{ij} = d_{ij}^2,\quad
+  u_{ij} = z_{ij}^2,\quad
+  w_{ij} = z_{ij}^3,\quad
+  r_{ij} = C_6/z_{ij}^3 = C_6/d_{ij}^6.
+\]
+Contraintes :
+\begin{align*}
+  r_{ij}\,w_{ij} &= C_6, \\
+  z_{ij} &= \norm{\mathbf{x}_i-\mathbf{x}_j}^2, \\
+  w_{ij} &= u_{ij}\,z_{ij}, \\
+  u_{ij} &= z_{ij}^2.
+\end{align*}
+Objectif : $\min \sum_{i<j}(r_{ij}-Q_{ij})^2$.
+
+\textbf{Avantage :} l'objectif est \emph{quadratique} en $r_{ij}$ ;
+\textbf{inconvénient :} 4 variables auxiliaires par paire, problème très non convexe.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Formulation Polaire}
+% ─────────────────────────────────────────────────────────────────────────────
+
+Pour chaque paire, on paramétrise le vecteur $\mathbf{x}_i-\mathbf{x}_j$ en polaires :
+\[
+  x_{i,1}-x_{j,1} = R_{ij}\cos\theta_{ij},\qquad
+  x_{i,2}-x_{j,2} = R_{ij}\sin\theta_{ij},
+\]
+avec $R_{ij} \geq d_{\min}$, $\theta_{ij} \in [-\pi,\pi]$.
+
+On introduit $\varepsilon_{ij} = C_6/R_{ij}^6 - Q_{ij}$ et on minimise
+$\sum_{i<j}\varepsilon_{ij}^2$.
+
+\textbf{Pourquoi ?} Sépare explicitement distance $R_{ij}$ et orientation
+$\theta_{ij}$ ; souvent très précis en $n$ petit (cf.\ résultats $n=2$).
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Formulation Surogate}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\subsubsection{Point de départ : contraintes séparées}
+
+On part du problème avec variables $(r,w,z,\mu,\mathbf{x})$ et contraintes :
+\begin{align}
+  r_{ij}\,w_{ij} &= C_6, \label{c1}\\
+  z_{ij} &= \norm{\mathbf{x}_i-\mathbf{x}_j}^2, \label{c2}\\
+  w_{ij} &= \mu_{ij}\,z_{ij}, \label{c3}\\
+  \mu_{ij} &= z_{ij}^2. \label{c4}
+\end{align}
+Objectif : $\min\sum_{i<j}(r_{ij}-Q_{ij})^2$.
+
+\subsubsection{Fusion en une seule contrainte}
+
+On ramène chaque contrainte à zéro et on somme :
+\begin{align*}
+  &(r_{ij}w_{ij}-C_6) + (z_{ij}-\norm{\mathbf{x}_i-\mathbf{x}_j}^2) \\
+  &\quad + (w_{ij}-\mu_{ij}z_{ij}) + (\mu_{ij}-z_{ij}^2) = 0.
+\end{align*}
+En développant :
+\[
+  r_{ij}w_{ij} + z_{ij} + w_{ij} + \mu_{ij}
+  - C_6 - \norm{\mathbf{x}_i-\mathbf{x}_j}^2 - \mu_{ij}z_{ij} - z_{ij}^2 = 0.
+\]
+On regroupe :
+\[
+  w_{ij}(r_{ij}+1) + (1-z_{ij})(\mu_{ij}+z_{ij})
+  - \norm{\mathbf{x}_i-\mathbf{x}_j}^2 - C_6 = 0.
+\]
+
+\begin{objetifbox}
+\textbf{Formulation Surogate finale :}
+\[
+  \min \sum_{i<j}(r_{ij}-Q_{ij})^2
+\]
+sous
+\[
+  \boxed{
+  r_{ij}w_{ij} + z_{ij} + w_{ij} + \mu_{ij}
+  - \mu_{ij}z_{ij} - z_{ij}^2
+  - \norm{\mathbf{x}_i-\mathbf{x}_j}^2 - C_6 = 0
+  }
+\]
+avec $0 \leq \mathbf{x} \leq L$.
+\end{objetifbox}
+
+\textbf{Attention :} fusionner les contraintes en une seule équation
+\emph{ne garantit pas} l'équivalence avec le système
+\eqref{c1}--\eqref{c4} : c'est une relaxation qui peut admettre
+des solutions parasites (d'où des écarts entre objectif solveur
+et erreur Rydberg vraie observés pour Surogate).
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Formulation Quadratique (matrices explicites)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\subsubsection{Idée générale}
+
+Chaque contrainte polynomiale est reformulée sous la forme
+\emph{quadratique liftée} :
+\[
+  \frac{1}{2}\mathbf{X}^\top Q_k \mathbf{X} + \mathbf{b}_k^\top \mathbf{X} = c_k,
+\]
+où $\mathbf{X}$ regroupe toutes les variables de la paire $(i,j)$.
+
+\subsubsection{Vecteur de variables (dimension 8)}
+
+Pour la paire $(i,j)$ en $d=2$ :
+\[
+  \mathbf{X}_{ij} = \begin{pmatrix}
+    r_{ij} \\ w_{ij} \\ \mu_{ij} \\ z_{ij} \\
+    x_{i,1} \\ x_{i,2} \\ x_{j,1} \\ x_{j,2}
+  \end{pmatrix}
+  \in \R^8.
+\]
+
+\subsubsection{Contrainte 1 --- \textcolor{contrainteBleu}{$r_{ij}w_{ij} = C_6$}}
+
+Le terme bilinéaire $r_{ij}w_{ij}$ s'écrit :
+\[
+  \mathbf{X}^\top Q_1 \mathbf{X} = 2r_{ij}w_{ij}
+  \quad\Rightarrow\quad
+  \frac{1}{2}\mathbf{X}^\top Q_1 \mathbf{X} = C_6,
+\]
+avec $Q_1[1,2]=Q_1[2,1]=1$, tous les autres coefficients nuls.
+
+\subsubsection{Contrainte 2 --- \textcolor{contrainteOrange}{$\mu_{ij}z_{ij} - w_{ij} = 0$}}
+
+\[
+  \frac{1}{2}\mathbf{X}^\top Q_2 \mathbf{X} + \mathbf{b}_2^\top \mathbf{X} = 0,
+\]
+$Q_2[3,4]=Q_2[4,3]=1$, $\mathbf{b}_2[2]=-1$ (coefficient de $w_{ij}$).
+
+\subsubsection{Contrainte 3 --- \textcolor{contrainteRose}{$z_{ij}^2 - \mu_{ij} = 0$}}
+
+Le terme $z_{ij}^2$ : $\frac{\partial}{\partial z_{ij}}(z_{ij}^2)=2z_{ij}$,
+donc $\frac{1}{2}\mathbf{X}^\top Q_3\mathbf{X}$ avec $Q_3[4,4]=2$,
+et $\mathbf{b}_3[3]=-1$ pour $-\mu_{ij}$.
+
+\subsubsection{Contrainte 4 --- \textcolor{contrainteVert}{$\norm{\mathbf{x}_i-\mathbf{x}_j}^2 - z_{ij} = 0$}}
+
+On développe $\norm{\mathbf{x}_i-\mathbf{x}_j}^2
+= x_{i,1}^2+x_{i,2}^2+x_{j,1}^2+x_{j,2}^2-2x_{i,1}x_{j,1}-2x_{i,2}x_{j,2}$ :
+\[
+  \frac{1}{2}\mathbf{X}^\top Q_4 \mathbf{X} + \mathbf{b}_4^\top \mathbf{X} = 0,
+\]
+avec $Q_4[5,5]=Q_4[6,6]=Q_4[7,7]=Q_4[8,8]=2$,
+$Q_4[5,7]=Q_4[7,5]=Q_4[6,8]=Q_4[8,6]=-2$,
+$\mathbf{b}_4[4]=-1$.
+
+\begin{center}
+\small
+\begin{tabular}{clc}
+  \toprule
+  \textbf{Couleur} & \textbf{Contrainte} & \textbf{Forme quadratique} \\
+  \midrule
+  \textcolor{contrainteBleu}{Bleu}   & $r_{ij}w_{ij}=C_6$        & $\frac{1}{2}\mathbf{X}^\top Q_1\mathbf{X}=C_6$ \\
+  \textcolor{contrainteOrange}{Orange} & $\mu_{ij}z_{ij}=w_{ij}$   & $\frac{1}{2}\mathbf{X}^\top Q_2\mathbf{X}+\mathbf{b}_2^\top\mathbf{X}=0$ \\
+  \textcolor{contrainteRose}{Rose}    & $z_{ij}^2=\mu_{ij}$       & $\frac{1}{2}\mathbf{X}^\top Q_3\mathbf{X}+\mathbf{b}_3^\top\mathbf{X}=0$ \\
+  \textcolor{contrainteVert}{Vert}     & $\norm{\mathbf{x}_i-\mathbf{x}_j}^2=z_{ij}$ & $\frac{1}{2}\mathbf{X}^\top Q_4\mathbf{X}+\mathbf{b}_4^\top\mathbf{X}=0$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Exemple de vérification} pour la contrainte 4 avec
+$\mathbf{x}_i=(0,0)$, $\mathbf{x}_j=(3,4)$, $z_{ij}=25$ :
+$\norm{\mathbf{x}_i-\mathbf{x}_j}^2=25=z_{ij}$ $\Rightarrow$ contrainte satisfaite. $\checkmark$
+
+% ==============================================================================
+\section{Protocole expérimental (\texttt{benchmark\_bruit.jl})}
+% ==============================================================================
+
+\subsection{Génération des données}
+
+\begin{enumerate}[leftmargin=2em]
+  \item Choisir $L$ selon \texttt{L\_fixe}, \texttt{L\_adaptatif} ou \texttt{L\_optimal}.
+  \item Générer $\mathbf{x}^{\mathrm{ref}}$ via \texttt{generer\_init} (collision évitée).
+  \item Construire $Q_{ij} = C_6/\norm{\mathbf{x}^{\mathrm{ref}}_i-\mathbf{x}^{\mathrm{ref}}_j}^6$.
+  \item (Option bruit) $\tilde{Q}_{ij} = \max(Q_{ij}(1+\sigma\varepsilon_{ij}),\,0.01\,Q_{ij})$.
+\end{enumerate}
+
+\subsection{Stratégies de résolution}
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{single} : un seul point initial ;
+  \item \textbf{multistart} : $n_{\mathrm{rs}}$ points initiaux
+    ($5$ si $n\leq 10$, $3$ si $n\leq 20$, $2$ sinon),
+    on garde la meilleure erreur Rydberg ;
+  \item \textbf{exact} : MDS algébrique (une seule passe).
+\end{itemize}
+
+\subsection{Formulations testées}
+
+Standard, Reformulée, Polaire, Surogate, Quadratique, MDS\_Exact.
+
+\subsection{Sorties}
+
+Fichiers CSV, graphiques (erreur Rydberg, RMSE, temps, bruit) et tableaux
+comparatifs avec marqueur $\star$ sur la meilleure méthode par groupe $(n, L)$.
+
+% ==============================================================================
+\section{Résultats illustratifs ($n=2$)}
+% ==============================================================================
+
+Les tableaux suivants reproduisent les résultats du benchmark pour $n=2$,
+$C_6=1$, $d=2$ (multistart sauf mention).
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{llrrr}
+  \toprule
+  $L$ & Formulation & $\mathcal{E}_{\mathrm{Ryd}}$ & RMSE dist & Temps (s) \\
+  \midrule
+  \texttt{L\_fixe}      & MDS\_Exact   & $0$            & $0$           & 0.042 \\
+  \texttt{L\_fixe}      & Polaire      & $4.7\times 10^{-23}$ & $2.2\times 10^{-9}$ & 0.007 \\
+  \texttt{L\_fixe}      & Quadratique  & $6.3\times 10^{-24}$ & $8.1\times 10^{-10}$ & 0.027 \\
+  \texttt{L\_fixe}      & Reformulée   & $2.6\times 10^{-33}$ & $1.6\times 10^{-14}$ & 0.010 \\
+  \texttt{L\_fixe}      & Standard     & $7.2\times 10^{-19}$ & $2.8\times 10^{-7}$ & 0.010 \\
+  \texttt{L\_fixe}      & Surogate     & $2.0\times 10^{-6}$  & $1.6$         & 0.015 \\
+  \midrule
+  \texttt{L\_adaptatif} & MDS\_Exact   & $\sim 10^{-53}$ & $\sim 10^{-14}$ & $\sim 0$ \\
+  \texttt{L\_adaptatif} & Standard     & $5.4\times 10^{-22}$ & $19.5$ & 0.003 \\
+  \texttt{L\_adaptatif} & Polaire      & $5.4\times 10^{-22}$ & $19.5$ & 0.003 \\
+  \texttt{L\_adaptatif} & Surogate     & $6.2\times 10^{-21}$ & $29.1$ & 0.004 \\
+  \texttt{L\_adaptatif} & Quadratique  & $7.0\times 10^{74}$  & $76.9$ & 7.9 \\
+  \midrule
+  \texttt{L\_optimal}   & MDS\_Exact   & $0$            & $0$           & $\sim 0$ \\
+  \texttt{L\_optimal}   & Reformulée   & $1.1\times 10^{-30}$ & $3.2\times 10^{-11}$ & 0.008 \\
+  \texttt{L\_optimal}   & Polaire      & $1.1\times 10^{-19}$ & $1.0\times 10^{-5}$ & 0.008 \\
+  \texttt{L\_optimal}   & Quadratique  & $7.2\times 10^{-18}$ & $8.1\times 10^{-5}$ & 5.96 \\
+  \texttt{L\_optimal}   & Standard     & $1.5\times 10^{-13}$ & $1.2\times 10^{-2}$ & 0.012 \\
+  \texttt{L\_optimal}   & Surogate     & $2.2\times 10^{-10}$ & $0.35$ & 0.020 \\
+  \bottomrule
+\end{tabular}
+\caption{Synthèse $n=2$ (multistart) : erreur Rydberg, RMSE distances, temps.}
+\end{table}
+
+\subsection{Lecture des résultats}
+
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{MDS\_Exact} domine toujours quand $Q$ est exact
+    ($\mathcal{E}_{\mathrm{Ryd}}\approx 0$).
+  \item \textbf{Polaire} et \textbf{Reformulée} excellent en \texttt{L\_fixe}
+    et \texttt{L\_optimal} (RMSE $\ll 10^{-5}$).
+  \item \textbf{Surogate} : objectif solveur $\approx 0$ mais
+    $\mathcal{E}_{\mathrm{Ryd}}$ élevée en \texttt{L\_fixe} single
+    (relaxation non équivalente).
+  \item \textbf{Quadratique} : sensible à $L$ --- échec en single/\texttt{L\_fixe},
+    excellent en multistart/\texttt{L\_fixe} ($\mathrm{RMSE}\sim 10^{-9}$),
+    divergence en \texttt{L\_adaptatif} (boîte trop grande, $L\approx 141$).
+  \item \textbf{L\_adaptatif} dégrade fortement la RMSE géométrique
+    malgré de petites erreurs Rydberg : le solveur trouve des configurations
+    compatibles avec $Q$ mais géométriquement très différentes de la référence
+    (ambiguïté des isométries + mauvaise échelle).
+\end{enumerate}
+
+% ==============================================================================
+\section{Effet du bruit}
+% ==============================================================================
+
+Modèle : $\tilde{Q}_{ij} = Q_{ij}(1+\sigma\varepsilon_{ij})$,
+$\varepsilon_{ij}\sim\mathcal{N}(0,1)$.
+
+Propagation vers $D^2_{ij} = Q_{ij}^{-1/3}$ :
+\[
+  \tilde{D}^2_{ij} \approx D^2_{ij}\left(1-\frac{\sigma}{3}\varepsilon_{ij}\right)
+  \quad(\sigma\ll 1).
+\]
+Le MDS projette les valeurs propres négatives de $B$ sur zéro,
+introduisant un biais systématique croissant avec $\sigma$.
+
+Niveaux testés : $\sigma \in \{0,\,0.01,\,0.05,\,0.10,\,0.20,\,0.30\}$.
+
+% ==============================================================================
+\section{Conclusion}
+% ==============================================================================
+
+\begin{tcolorbox}[colback=vert!5, colframe=vert!60!black,
+                  title={\bfseries\color{white} Bilan}, arc=4pt]
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+  \item Six formulations couvrent le spectre
+    \emph{directe} (Standard), \emph{liftée} (Reformulée, Quadratique),
+    \emph{paramétrique} (Polaire), \emph{relaxée} (Surogate)
+    et \emph{algébrique} (MDS).
+  \item Le choix de $L$ est aussi important que le choix de formulation :
+    \texttt{L\_optimal} et \texttt{L\_fixe} donnent les meilleurs résultats ;
+    \texttt{L\_adaptatif} peut être trop grand.
+  \item Deux métriques complémentaires : $\mathcal{E}_{\mathrm{Ryd}}$ (physique)
+    et $\mathrm{RMSE}_{\mathrm{dist}}$ (géométrie invariante).
+  \item La sensibilité $d\mapsto 1/d^6$ explique l'instabilité numérique
+    pour grandes distances et sous bruit.
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+\noindent
+\textbf{Chaîne complète du pipeline :}
+\[
+  \underbrace{Q}_{\text{mesures}}
+  \;\xrightarrow{\;\text{NLP ou MDS}\;}
+  \underbrace{\hat{\mathbf{x}}}_{\text{positions}}
+  \;\xrightarrow{\;\mathcal{E}_{\mathrm{Ryd}},\,\mathrm{RMSE}\;}
+  \underbrace{\text{évaluation}}_{\text{benchmark}}
+\]
+
+\end{document}
