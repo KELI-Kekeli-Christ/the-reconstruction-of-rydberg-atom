@@ -1,0 +1,73 @@
+════════════════════════════════════════════════════════════════════════
+  EXPORT x + r_ij — 2026-07-24 15:56:19
+════════════════════════════════════════════════════════════════════════
+OUT_RUNS=/home/christ/stage_LMA_2026/julia_programming/benchmark/test_real/exp_L_alpha_xr_runs.csv
+OUT_PAIRS=/home/christ/stage_LMA_2026/julia_programming/benchmark/test_real/exp_L_alpha_xr_pairs.csv
+N_VALUES=[4, 10] N_INSTANCES=5 ALPHAS=[1.0e-6, 0.0001, 0.01, 1.0]
+FORMS=Standard, Simple, Simple_square, Taylor, Taylor_square
+4 expériences : Exp2±zmin, Exp1±zmin
+
+▶ EXP 2 — Q exacte synthétique (exp_id=2)
+
+── Exp2 inst=1 n=4 zmin=1.4045 ──
+    [avec_zmin] α=1.0e-06  Standard       L*=3.1267 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=1.94e-07 collapsed=0
+    [sans_zmin] α=1.0e-06  Standard       L*=3.4988 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=1.63e-07 collapsed=0
+    [avec_zmin] α=1.0e-06  Simple         L*=4.1965 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=6.52e-14 collapsed=0
+    [sans_zmin] α=1.0e-06  Simple         L*=4.1965 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=8.83e-15 collapsed=0
+    [avec_zmin] α=1.0e-06  Simple_square  L*=4.1965 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=9.80e-15 collapsed=0
+    [sans_zmin] α=1.0e-06  Simple_square  L*=4.1965 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=1.46e-16 collapsed=0
+    [avec_zmin] α=1.0e-06  Taylor         L*=2.7460 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=1.70e-02 collapsed=0
+    [sans_zmin] α=1.0e-06  Taylor         L*=2.6556 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=9.16e-05 collapsed=0
+    [avec_zmin] α=1.0e-06  Taylor_square  L*=2.9457 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=4.84e-06 collapsed=0
+    [sans_zmin] α=1.0e-06  Taylor_square  L*=2.7866 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=3.34e-06 collapsed=0
+    [avec_zmin] α=1.0e-04  Standard       L*=2.4725 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=1.39e-05 collapsed=0
+    [sans_zmin] α=1.0e-04  Standard       L*=2.7521 dmin=1.4044e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=1.63e-05 collapsed=0
+    [avec_zmin] α=1.0e-04  Simple         L*=4.1965 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=5.27e-14 collapsed=0
+    [sans_zmin] α=1.0e-04  Simple         L*=4.1965 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=8.84e-11 collapsed=0
+    [avec_zmin] α=1.0e-04  Simple_square  L*=4.1965 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=1.95e-17 collapsed=0
+    [sans_zmin] α=1.0e-04  Simple_square  L*=4.1965 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=1.46e-12 collapsed=0
+    [avec_zmin] α=1.0e-04  Taylor         L*=1.9644 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=1.73e-02 collapsed=0
+    [sans_zmin] α=1.0e-04  Taylor         L*=1.4769 dmin=4.8001e-08 zmin=1.4045e+00 ≠zmin Eryd=6.68e+87 collapsed=1
+    [avec_zmin] α=1.0e-04  Taylor_square  L*=2.5520 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=1.70e-02 collapsed=0
+    [sans_zmin] α=1.0e-04  Taylor_square  L*=2.0737 dmin=7.7616e-02 zmin=1.4045e+00 ≠zmin Eryd=2.09e+13 collapsed=0
+    [avec_zmin] α=1.0e-02  Standard       L*=1.8483 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=1.28e-03 collapsed=0
+    [sans_zmin] α=1.0e-02  Standard       L*=1.8613 dmin=1.4034e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=1.43e-03 collapsed=0
+    [avec_zmin] α=1.0e-02  Simple         L*=4.1952 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=5.27e-10 collapsed=0
+    [sans_zmin] α=1.0e-02  Simple         L*=4.1946 dmin=1.4028e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=8.93e-07 collapsed=0
+    [avec_zmin] α=1.0e-02  Simple_square  L*=4.1965 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=1.45e-13 collapsed=0
+    [sans_zmin] α=1.0e-02  Simple_square  L*=4.1964 dmin=1.4043e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=1.47e-08 collapsed=0
+    [avec_zmin] α=1.0e-02  Taylor         L*=1.4045 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=4.86e-02 collapsed=0
+    [sans_zmin] α=1.0e-02  Taylor         L*=0.9825 dmin=8.0020e-10 zmin=1.4045e+00 ≠zmin Eryd=1.45e+109 collapsed=2
+    [avec_zmin] α=1.0e-02  Taylor_square  L*=1.4045 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=4.86e-02 collapsed=0
+    [sans_zmin] α=1.0e-02  Taylor_square  L*=0.9927 dmin=5.9263e-05 zmin=1.4045e+00 ≠zmin Eryd=5.33e+50 collapsed=1
+    [avec_zmin] α=1.0e+00  Standard       L*=1.4045 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=5.04e-02 collapsed=0
+    [sans_zmin] α=1.0e+00  Standard       L*=1.3259 dmin=1.3259e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=1.02e-01 collapsed=0
+    [avec_zmin] α=1.0e+00  Simple         L*=4.0199 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=2.34e-07 collapsed=0
+    [sans_zmin] α=1.0e+00  Simple         L*=4.0018 dmin=1.2836e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=8.70e-03 collapsed=0
+    [avec_zmin] α=1.0e+00  Simple_square  L*=4.1949 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=1.46e-09 collapsed=0
+    [sans_zmin] α=1.0e+00  Simple_square  L*=4.1871 dmin=1.3820e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=1.75e-04 collapsed=0
+    [avec_zmin] α=1.0e+00  Taylor         L*=1.4045 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=4.86e-02 collapsed=0
+    [sans_zmin] α=1.0e+00  Taylor         L*=0.0010 dmin=2.9462e-10 zmin=1.4045e+00 ≠zmin Eryd=2.34e+114 collapsed=2
+    [avec_zmin] α=1.0e+00  Taylor_square  L*=1.4045 dmin=1.4045e+00 zmin=1.4045e+00 ≈zmin ✓ Eryd=4.86e-02 collapsed=0
+    [sans_zmin] α=1.0e+00  Taylor_square  L*=0.7952 dmin=3.4934e-05 zmin=1.4045e+00 ≠zmin Eryd=3.03e+53 collapsed=1
+
+── Exp2 inst=1 n=10 zmin=0.5965 ──
+    [avec_zmin] α=1.0e-06  Standard       ÉCHEC
+    [sans_zmin] α=1.0e-06  Standard       L*=6.6883 dmin=5.9646e-01 zmin=5.9646e-01 ≈zmin ✓ Eryd=2.56e-07 collapsed=0
+    [avec_zmin] α=1.0e-06  Simple         L*=7.4458 dmin=5.9646e-01 zmin=5.9646e-01 ≈zmin ✓ Eryd=1.64e-08 collapsed=0
+    [sans_zmin] α=1.0e-06  Simple         L*=7.2292 dmin=5.9646e-01 zmin=5.9646e-01 ≈zmin ✓ Eryd=7.39e-13 collapsed=0
+    [avec_zmin] α=1.0e-06  Simple_square  L*=7.2292 dmin=5.9646e-01 zmin=5.9646e-01 ≈zmin ✓ Eryd=1.68e-10 collapsed=0
+    [sans_zmin] α=1.0e-06  Simple_square  L*=7.2292 dmin=5.9646e-01 zmin=5.9646e-01 ≈zmin ✓ Eryd=3.32e-16 collapsed=0
+    [avec_zmin] α=1.0e-06  Taylor         L*=4.8357 dmin=5.9646e-01 zmin=5.9646e-01 ≈zmin ✓ Eryd=1.64e+00 collapsed=0
+    [sans_zmin] α=1.0e-06  Taylor         L*=25126.2240 dmin=5.9646e-01 zmin=5.9646e-01 ≈zmin ✓ Eryd=2.49e-04 collapsed=0
+    [avec_zmin] α=1.0e-06  Taylor_square  L*=6.9930 dmin=5.9646e-01 zmin=5.9646e-01 ≈zmin ✓ Eryd=2.31e-06 collapsed=0
+    [sans_zmin] α=1.0e-06  Taylor_square  L*=7.4044 dmin=5.9646e-01 zmin=5.9646e-01 ≈zmin ✓ Eryd=1.64e-09 collapsed=0
+    [avec_zmin] α=1.0e-04  Standard       L*=5.0193 dmin=5.9646e-01 zmin=5.9646e-01 ≈zmin ✓ Eryd=4.09e-05 collapsed=0
+    [sans_zmin] α=1.0e-04  Standard       L*=5.1060 dmin=5.9646e-01 zmin=5.9646e-01 ≈zmin ✓ Eryd=2.20e-05 collapsed=0
+    [avec_zmin] α=1.0e-04  Simple         L*=7.4458 dmin=5.9646e-01 zmin=5.9646e-01 ≈zmin ✓ Eryd=2.86e-08 collapsed=0
+    [sans_zmin] α=1.0e-04  Simple         L*=7.4458 dmin=5.9646e-01 zmin=5.9646e-01 ≈zmin ✓ Eryd=5.86e-09 collapsed=0
+    [avec_zmin] α=1.0e-04  Simple_square  L*=7.2292 dmin=5.9646e-01 zmin=5.9646e-01 ≈zmin ✓ Eryd=2.26e-10 collapsed=0
+    [sans_zmin] α=1.0e-04  Simple_square  L*=7.2292 dmin=5.9646e-01 zmin=5.9646e-01 ≈zmin ✓ Eryd=3.32e-12 collapsed=0
+    [avec_zmin] α=1.0e-04  Taylor         L*=296.8265 dmin=5.9656e-01 zmin=5.9646e-01 ≈zmin ✓ Eryd=1.64e-03 collapsed=0
+    [sans_zmin] α=1.0e-04  Taylor         L*=2.2099 dmin=5.0362e-02 zmin=5.9646e-01 ≠zmin Eryd=4.81e+15 collapsed=0
+    [avec_zmin] α=1.0e-04  Taylor_square  L*=4.6704 dmin=5.9646e-01 zmin=5.9646e-01 ≈zmin ✓ Eryd=1.73e-03 collapsed=0
