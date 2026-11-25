@@ -290,7 +290,7 @@ Each full-campaign row records `formulation`, `alpha`, `use_zmin`, `L_found`, `d
 
 ```bibtex
 @article{gueye2026rydberg,
-  author  = {Gueye, Serigne and Michelon, Philippe and Keli, Christ Kekeli},
+  author  = {Gueye Serigne , Michelon Philippe and Keli Christ Kekeli},
   title   = {Reconstruction de positions d'atomes de {Rydberg}
              {\`a} partir de matrices d'interaction van der {Waals}},
   year    = {2026},
