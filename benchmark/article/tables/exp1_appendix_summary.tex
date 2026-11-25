@@ -1,0 +1,276 @@
+% Auto-generated — Exp. 1 full summary tables
+\section{Résultats détaillés --- Expérience~1 ($Q_{\mathrm{bruit\,dist}}$)}
+\label{app:exp1}
+
+Matrice $Q$ générée aléatoirement via \texttt{Q\_bruit\_dist} ; objectif : retrouver $\mathbf{x}$ minimisant $\mathcal{E}_{\mathrm{Ryd}}$. Moyennes sur 10 instances indépendantes.
+
+\subsection{$n=4$, Fixe ($L{=}10$)}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lrr@{}}
+  \toprule
+  Formulation & $\mathcal{E}_{\mathrm{Ryd}}$ & Temps moy. \\
+  \midrule
+  MDS exact & $6.79\times10^{10}$ & 0.24\,s \\
+  Standard & $7.23\times10^{10}$ & 1.0\,s \\
+  Taylor & $\mathbf{6.51\times10^{10}}$ & 0.28\,s \\
+  Taylor$^2$ & $6.51\times10^{10}$ & 0.42\,s \\
+  Simple$^2$ & $6.79\times10^{10}$ & 0.13\,s \\
+  Simple & $6.79\times10^{10}$ & 0.13\,s \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{$n=4$, Adaptatif ($L{=}100\sqrt{n}$)}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lrr@{}}
+  \toprule
+  Formulation & $\mathcal{E}_{\mathrm{Ryd}}$ & Temps moy. \\
+  \midrule
+  MDS exact & $1.30\times10^{-11}$ & 0\,ms \\
+  Standard & $1.30\times10^{-11}$ & 0.01\,s \\
+  Taylor & $2.56\times10^{-14}$ & 0.01\,s \\
+  Taylor$^2$ & $\mathbf{1.67\times10^{-15}}$ & 0.62\,s \\
+  Simple$^2$ & $1.69\times10^{-11}$ & 0.09\,s \\
+  Simple & $1.30\times10^{-11}$ & 0.04\,s \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{$n=4$, Optimal ($L{\approx}r_{\min}$)}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lrr@{}}
+  \toprule
+  Formulation & $\mathcal{E}_{\mathrm{Ryd}}$ & Temps moy. \\
+  \midrule
+  MDS exact & $4.42\times10^{8}$ & 0\,ms \\
+  Standard & $\mathbf{2.06\times10^{8}}$ & 0.19\,s \\
+  Taylor & $2.06\times10^{8}$ & 1.4\,s \\
+  Taylor$^2$ & $2.06\times10^{8}$ & 3.3\,s \\
+  Simple$^2$ & $4.42\times10^{8}$ & 0.50\,s \\
+  Simple & $4.42\times10^{8}$ & 0.05\,s \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{$n=10$, Fixe ($L{=}10$)}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lrr@{}}
+  \toprule
+  Formulation & $\mathcal{E}_{\mathrm{Ryd}}$ & Temps moy. \\
+  \midrule
+  MDS exact & $\mathbf{7.51\times10^{29}}$ & 0\,ms \\
+  Standard & $7.51\times10^{29}$ & 4.3\,s \\
+  Taylor & $7.51\times10^{29}$ & 9.3\,s \\
+  Taylor$^2$ & $7.51\times10^{29}$ & 7.7\,s \\
+  Simple$^2$ & $7.51\times10^{29}$ & 0.24\,s \\
+  Simple & $7.51\times10^{29}$ & 0.22\,s \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{$n=10$, Adaptatif ($L{=}100\sqrt{n}$)}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lrr@{}}
+  \toprule
+  Formulation & $\mathcal{E}_{\mathrm{Ryd}}$ & Temps moy. \\
+  \midrule
+  MDS exact & $9.86\times10^{6}$ & 0\,ms \\
+  Standard & $9.86\times10^{6}$ & 0.15\,s \\
+  Taylor & $\mathbf{8.15\times10^{-10}}$ & 2.0\,s \\
+  Taylor$^2$ & $1.07\times10^{-9}$ & 3.4\,s \\
+  Simple$^2$ & $9.86\times10^{6}$ & 0.65\,s \\
+  Simple & $9.86\times10^{6}$ & 0.34\,s \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{$n=10$, Optimal ($L{\approx}r_{\min}$)}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lrr@{}}
+  \toprule
+  Formulation & $\mathcal{E}_{\mathrm{Ryd}}$ & Temps moy. \\
+  \midrule
+  MDS exact & $3.49\times10^{14}$ & 0\,ms \\
+  Standard & $3.87\times10^{14}$ & 3.9\,s \\
+  Taylor & $\mathbf{3.48\times10^{14}}$ & 4.4\,s \\
+  Taylor$^2$ & $3.48\times10^{14}$ & 5.7\,s \\
+  Simple$^2$ & $3.49\times10^{14}$ & 0.22\,s \\
+  Simple & $3.49\times10^{14}$ & 0.20\,s \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{$n=20$, Fixe ($L{=}10$)}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lrr@{}}
+  \toprule
+  Formulation & $\mathcal{E}_{\mathrm{Ryd}}$ & Temps moy. \\
+  \midrule
+  MDS exact & $\mathbf{2.66\times10^{26}}$ & 0\,ms \\
+  Standard & $2.66\times10^{26}$ & 15.8\,s \\
+  Taylor & $2.66\times10^{26}$ & 39.4\,s \\
+  Taylor$^2$ & $2.66\times10^{26}$ & 26.1\,s \\
+  Simple$^2$ & $2.66\times10^{26}$ & 0.80\,s \\
+  Simple & $2.66\times10^{26}$ & 0.72\,s \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{$n=20$, Adaptatif ($L{=}100\sqrt{n}$)}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lrr@{}}
+  \toprule
+  Formulation & $\mathcal{E}_{\mathrm{Ryd}}$ & Temps moy. \\
+  \midrule
+  MDS exact & $3.26\times10^{6}$ & 1\,ms \\
+  Standard & $3.26\times10^{6}$ & 0.15\,s \\
+  Taylor & $\mathbf{3.23\times10^{-6}}$ & 13.1\,s \\
+  Taylor$^2$ & $4.79\times10^{-5}$ & 43.5\,s \\
+  Simple$^2$ & $3.26\times10^{6}$ & 2.8\,s \\
+  Simple & $3.26\times10^{6}$ & 1.5\,s \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{$n=20$, Optimal ($L{\approx}r_{\min}$)}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lrr@{}}
+  \toprule
+  Formulation & $\mathcal{E}_{\mathrm{Ryd}}$ & Temps moy. \\
+  \midrule
+  MDS exact & $\mathbf{5.32\times10^{27}}$ & 1\,ms \\
+  Standard & $6.65\times10^{27}$ & 15.8\,s \\
+  Taylor & $5.32\times10^{27}$ & 48.0\,s \\
+  Taylor$^2$ & $5.32\times10^{27}$ & 30.8\,s \\
+  Simple$^2$ & $5.32\times10^{27}$ & 0.84\,s \\
+  Simple & $5.32\times10^{27}$ & 0.71\,s \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{$n=30$, Fixe ($L{=}10$)}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lrr@{}}
+  \toprule
+  Formulation & $\mathcal{E}_{\mathrm{Ryd}}$ & Temps moy. \\
+  \midrule
+  MDS exact & $\mathbf{9.09\times10^{28}}$ & 1\,ms \\
+  Standard & $9.09\times10^{28}$ & 1.2\,min \\
+  Taylor & $1\times10^{29}$ & 5.1\,min \\
+  Taylor$^2$ & $9.09\times10^{28}$ & 1.2\,min \\
+  Simple$^2$ & $9.09\times10^{28}$ & 2.2\,s \\
+  Simple & $9.09\times10^{28}$ & 1.5\,s \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{$n=30$, Adaptatif ($L{=}100\sqrt{n}$)}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lrr@{}}
+  \toprule
+  Formulation & $\mathcal{E}_{\mathrm{Ryd}}$ & Temps moy. \\
+  \midrule
+  MDS exact & $7.25\times10^{15}$ & 1\,ms \\
+  Standard & $7.25\times10^{15}$ & 0.42\,s \\
+  Taylor & $\mathbf{7.25\times10^{15}}$ & 21.8\,s \\
+  Taylor$^2$ & $7.25\times10^{15}$ & 42.7\,s \\
+  Simple$^2$ & $7.25\times10^{15}$ & 15.7\,s \\
+  Simple & $7.25\times10^{15}$ & 3.8\,s \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{$n=30$, Optimal ($L{\approx}r_{\min}$)}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lrr@{}}
+  \toprule
+  Formulation & $\mathcal{E}_{\mathrm{Ryd}}$ & Temps moy. \\
+  \midrule
+  MDS exact & $\mathbf{2.44\times10^{37}}$ & 1\,ms \\
+  Standard & $3.48\times10^{37}$ & 1.5\,min \\
+  Taylor & $2.44\times10^{37}$ & 13.1\,min \\
+  Taylor$^2$ & $2.44\times10^{37}$ & 1.2\,min \\
+  Simple$^2$ & $2.44\times10^{37}$ & 2.2\,s \\
+  Simple & $2.44\times10^{37}$ & 1.7\,s \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{$n=50$, Fixe ($L{=}10$)}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lrr@{}}
+  \toprule
+  Formulation & $\mathcal{E}_{\mathrm{Ryd}}$ & Temps moy. \\
+  \midrule
+  MDS exact & $6\times10^{41}$ & 6\,ms \\
+  Standard & $\mathbf{4.06\times10^{31}}$ & 7.7\,min \\
+  Taylor & $6\times10^{41}$ & 4.7\,h \\
+  Taylor$^2$ & $6\times10^{41}$ & 34.7\,min \\
+  Simple$^2$ & $6\times10^{41}$ & 11.2\,s \\
+  Simple & $6\times10^{41}$ & 7.9\,s \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{$n=50$, Adaptatif ($L{=}100\sqrt{n}$)}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lrr@{}}
+  \toprule
+  Formulation & $\mathcal{E}_{\mathrm{Ryd}}$ & Temps moy. \\
+  \midrule
+  MDS exact & $\mathbf{7.82\times10^{27}}$ & 2\,ms \\
+  Standard & $7.82\times10^{27}$ & 11.2\,min \\
+  Taylor & $7.82\times10^{27}$ & 37.2\,min \\
+  Taylor$^2$ & $8.69\times10^{27}$ & 4.3\,min \\
+  Simple$^2$ & $7.82\times10^{27}$ & 1.6\,min \\
+  Simple & $7.82\times10^{27}$ & 24.0\,s \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{$n=50$, Optimal ($L{\approx}r_{\min}$)}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lrr@{}}
+  \toprule
+  Formulation & $\mathcal{E}_{\mathrm{Ryd}}$ & Temps moy. \\
+  \midrule
+  MDS exact & $\mathbf{6.70\times10^{33}}$ & 1\,ms \\
+  Standard & $8.38\times10^{33}$ & 6.8\,min \\
+  Taylor & $6.70\times10^{33}$ & 4.6\,h \\
+  Taylor$^2$ & $6.70\times10^{33}$ & 4.9\,min \\
+  Simple$^2$ & $6.70\times10^{33}$ & 11.7\,s \\
+  Simple & $6.70\times10^{33}$ & 8.6\,s \\
+  \bottomrule
+\end{tabular}
+\end{table}
+

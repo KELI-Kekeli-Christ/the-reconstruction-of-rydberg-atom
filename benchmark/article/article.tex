@@ -1,0 +1,1415 @@
+% Reconstruction de positions d'atomes de Rydberg
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{siunitx}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{ragged2e}
+\usepackage{lmodern}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.8cm,bottom=2.8cm}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=blue
+}
+
+\newtheorem{theorem}{Théorème}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Définition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remarque}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\Eryd}{\mathcal{E}_{\mathrm{Ryd}}}
+\newcommand{\cSix}{C_6}
+
+\title{%
+  Reconstruction de positions d'atomes de Rydberg\\
+  \large à partir de matrices d'interaction van der Waals
+}
+
+\author{
+Serigne Gueye$^{1}$,
+Philippe Michelon$^{2}$,
+Christ Kekeli Keli$^{1}$\\
+\small $^{1}$Laboratoire Informatique d'Avignon (LIA)\\
+\small $^{2}$Laboratoire de Mathématiques d'Avignon (LMA)
+}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+\textbf{Résumé :}
+Nous étudions le problème inverse consistant à reconstruire les positions
+de $n$ atomes de Rydberg à partir d'une matrice d'interactions
+$Q_{ij} = \cSix/r_{ij}^6$, où $r_{ij}$ est la distance euclidienne entre
+atomes $i$ et $j$. Ce modèle, central en simulation quantique à atomes neutres,
+est fortement non linéaire, mal conditionné pour les paires éloignées et
+invariant par isométrie plane. Nous proposons une étude de
+différentes formulations pour essayer de reconstruire les positions des atomes. 
+Nous analysons l'impact du choix de l'échelle $L$ du domaine de configuration sur
+deux métriques complémentaires : l'erreur Rydberg $\Eryd$ et le RMSE
+géométrique sur les distances. Nous étudions aussi $L$ comme variable
+de décision avec pénalité $\alpha L$ et
+$z_{\min}^{\mathrm{opt}}=(\cSix/Q_{\max})^{1/6}$. Sur données exactes ($n \in \{4,\ldots,40\}$),
+le MDS(Multidimensional Scaling) exact domine en précision et en temps ($\mathcal{O}(n^3)$). Les
+formulations NLP (Non Linear Programming) restent pertinentes sous bruit ou contraintes additionnelles.
+
+\medskip
+\noindent
+\textbf{Mots-clés :}
+atomes de Rydberg, problème inverse, multidimensional scaling,
+optimisation non linéaire, van der Waals, benchmark numérique.
+\end{abstract}
+
+\begin{abstract}
+\noindent
+\textbf{Abstract :}
+We address the inverse problem of reconstructing the planar positions of
+$n$ Rydberg atoms from an interaction matrix $Q_{ij} = C_6/r_{ij}^6$. This
+strongly nonlinear, ill-conditioned and gauge-invariant problem arises in
+neutral-atom quantum simulation. We study different formulations to try to reconstruct the positions of the atoms.
+We analyze the impact of the choice of the scale $L$ of the configuration domain on
+two complementary metrics: the Rydberg error $\Eryd$ and the geometric RMSE on the distances.
+We also study $L$ as a decision variable with penalty $\alpha L$ and
+$z_{\min}^{\mathrm{opt}}=(C_6/Q_{\max})^{1/6}$.
+On exact data ($n \in \{4,\ldots,40\}$), the exact MDS (Multidimensional Scaling) dominates in precision and time ($\mathcal{O}(n^3)$).
+The NLP (Non Linear Programming) formulations remain relevant under noise or additional constraints.
+
+\medskip
+\noindent
+\textbf{Keywords:}
+Rydberg atoms, inverse problem, multidimensional scaling,
+nonlinear optimization, van der Waals interaction, numerical benchmark.                                         
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+
+Les arrays d'atomes de Rydberg contrôlés optiquement constituent une plateforme
+prometteuse pour la simulation quantique et l'optimisation combinatorielle
+\cite{bernien2017,henry2024}. Dans de nombreuses expériences, la donnée
+observable n'est pas directement la position $\mathbf{x}_i \in \R^2$ de
+chaque atome, mais une matrice de couplages $Q_{ij}$ découlant du potentiel
+de van der Waals entre états Rydberg :
+\begin{equation}
+  Q_{ij} = \frac{\cSix}{r_{ij}^6}, \qquad
+  r_{ij} := \norm{\mathbf{x}_i - \mathbf{x}_j},
+  \label{eq:rydberg}
+\end{equation}
+avec $\cSix > 0$ une constante effective (nous prenons $\cSix = 1$ dans
+toutes les expériences numériques).
+
+\paragraph{Problème inverse.}
+Étant donné $Q \in \R^{n \times n}$ symétrique, à diagonale nulle et à
+entrées strictement positives hors diagonale, retrouver des positions
+$\mathbf{x}_1,\ldots,\mathbf{x}_n \in \R^d$ ($d=2$ dans ce travail) telles
+que~\eqref{eq:rydberg} soit satisfaite au mieux au sens des moindres carrés :
+\begin{equation}
+  \min_{\mathbf{x}}
+  \Eryd(\mathbf{x}, Q)
+  :=
+  \sum_{i<j}
+  \left(
+    \frac{\cSix}{\norm{\mathbf{x}_i-\mathbf{x}_j}^6}
+    - Q_{ij}
+  \right)^2.
+  \label{eq:objectif}
+\end{equation}
+
+\paragraph{Difficultés.}
+(i)~\emph{Non-linéarité forte} via l'exposant $-6$.
+(ii)~\emph{Mal-conditionnement} : de petites variations de $Q_{ij}$ pour
+interactions faibles induisent de grandes incertitudes sur $r_{ij}$.
+(iii)~\emph{Invariances} : translation, rotation et réflexion laissent $Q$
+invariante ; seules les distances sont identifiables.
+(iv)~\emph{Non-convexité} des formulations NLP : risque de minima locaux,
+d'où l'usage du multistart (multiple points de départ).
+
+\paragraph{Contributions.}
+Cet article propose six formulations pour reconstruire les positions des atomes :
+\begin{enumerate}[leftmargin=*, itemsep=2pt]
+  \item 5 formulations NLP (Standard, Simple, Simple square, Taylor, Taylor square) ;
+  \item 1 formulation MDS (Multidimensional Scaling) pour une résolution exacte du problème inverse ;
+  \item une analyse de sensibilité directe et inverse, et des critères sur
+        l'échelle $L$ du domaine ;
+  \item plusieurs benchmarks numériques sur données synthétiques, aléatoires et réelles (Pasqal).
+\end{enumerate}
+
+\section{Modèle physique et métriques}
+\label{sec:modele}
+
+\subsection{Origine de la loi en $1/r^6$}
+Le couplage dipôle--dipôle entre états Rydberg décroît en $1/r^3$ en
+amplitude ; l'énergie d'interaction effective, proportionnelle au carré de
+cette amplitude, suit donc une loi en $1/r^6$. La relation~\eqref{eq:rydberg}
+fixe la structure algébrique du problème inverse.
+
+\subsection{Invariances et identifiabilité}
+Si $\mathbf{x}$ est solution, alors $R\mathbf{x} + \mathbf{t}$ l'est aussi
+pour toute vecteur de rotation $R$ et tout vecteur de translation $\mathbf{t}$.
+La comparaison directe des coordonnées est donc inadéquate ; nous utilisons donc
+deux métriques invariantes ou physiques.
+
+\paragraph{Erreur Rydberg.}
+Pour toute solution candidate $\hat{\mathbf{x}}$ :
+\begin{equation}
+  \Eryd(\hat{\mathbf{x}}, Q)
+  = \sum_{i<j}\left(\frac{\cSix}{\norm{\hat{\mathbf{x}}_i-\hat{\mathbf{x}}_j}^6} - Q_{ij}\right)^2.
+\end{equation}
+Cette quantité mesure la fidélité au modèle physique indépendamment de la
+formulation d'optimisation employée.
+
+\paragraph{RMSE sur les distances.}
+Lorsque la géométrie de référence $\mathbf{x}^{\mathrm{ref}}$ est connue
+(benchmark synthétique) :
+\begin{equation}
+  \mathrm{RMSE}_{\mathrm{dist}}
+  = \sqrt{\frac{1}{\binom{n}{2}}\sum_{i<j}
+  \left(\norm{\hat{\mathbf{x}}_i-\hat{\mathbf{x}}_j}
+       -\norm{\mathbf{x}^{\mathrm{ref}}_i-\mathbf{x}^{\mathrm{ref}}_j}\right)^2}.
+\end{equation}
+Cette métrique capture la qualité géométrique réelle et permet de détecter
+des solutions \emph{physiquement} acceptables mais \emph{géométriquement}
+incorrectes.
+
+\section{Analyse de sensibilité}
+\label{sec:sensibilite}
+
+\subsection{Propagation directe}
+
+
+\[
+Q(d+h)=C(d+h)^{-6}
+\]
+
+\[
+Q(d)=Cd^{-6}
+\]
+
+\[
+\frac{\delta Q}{\delta d}
+=
+\frac{Q(d+h)-Q(d)}{h}
+\]
+
+\[
+\frac{\delta Q}{Q}
+=
+\frac{Q(d+h)-Q(d)}{h}
+\times
+\frac{h}{Q}
+\]
+
+\[
+=
+-6Cd^{-7}
+\times
+\frac{h}{Cd^{-6}}
+\]
+
+\[
+=
+-6\times\frac{1}{d^{7}}\times h\times d^{6}
+\]
+
+\[
+=
+-6\frac{h}{d}
+\]
+
+\[
+=
+-6\frac{\delta d}{d}.
+\]
+  
+
+
+ Une perturbation relative $\delta d/d$ induit
+\begin{equation}
+  \left|\frac{\delta Q}{Q}\right| = 6\left|\frac{\delta d}{d}\right|.
+  \label{eq:sens-direct}
+\end{equation}
+Une erreur de $1\,\%$ sur une distance se propage en $6\,\%$ sur l'interaction.
+
+\subsection{Propagation inverse}
+En inversant
+\begin{equation}
+  d
+  =
+  \left(
+    \frac{\cSix}{Q}
+  \right)^{1/6},
+\end{equation}
+on obtient en première approximation
+\begin{equation}
+  \left|\frac{\delta d}{d}\right|
+  \approx
+  \frac{1}{6}
+  \left|\frac{\delta Q}{Q}\right|.
+  \label{eq:sens-inverse}
+\end{equation}
+Cependant, lorsque $d \to \infty$, $Q \to 0^+$ et la sensibilité devient
+extrême : le problème inverse est \emph{mal conditionné} pour les paires
+éloignées.
+
+
+
+\section{Formulations de reconstruction}
+\label{sec:formulations}
+
+Nous partons du problème~\eqref{eq:objectif} :
+\begin{equation}
+  \min_{\mathbf{x}}
+  \sum_{i<j}
+  \left(
+    \frac{\cSix}{\norm{\mathbf{x}_i-\mathbf{x}_j}^6}
+    - Q_{ij}
+  \right)^2.
+\end{equation}
+Toutes les méthodes NLP sont résolues avec \textbf{Ipopt} via JuMP
+(tolérance $10^{-12}$). Pour chaque paire $(i,j)$, on note
+\begin{align}
+  r_{ij}
+  &:=
+  \norm{\mathbf{x}_i-\mathbf{x}_j},
+  \\
+  z_{ij}
+  &:=
+  \norm{\mathbf{x}_i-\mathbf{x}_j}^2
+  =
+  r_{ij}^2.
+\end{align}
+La contrainte physique $z_{ij} \geq z_{\min} > 0$
+(ou $r_{ij} \geq d_{\min}$) évite les collisions.
+Les positions sont bornées : $0 \leq x_{ik} \leq L$.
+
+\subsection{Formulation standard}
+\label{sec:form-standard}
+
+\paragraph{Point de départ.}
+L'objectif~\eqref{eq:objectif} s'écrit, pour chaque paire,
+\begin{equation}
+  f_{ij}(r_{ij})
+  =
+  \left(
+    \frac{\cSix}{r_{ij}^6}
+    - Q_{ij}
+  \right)^2.
+\end{equation}
+Posons
+\begin{equation}
+  z_{ij}
+  =
+  r_{ij}^2.
+\end{equation}
+Alors
+\begin{equation}
+  r_{ij}^6
+  =
+  (r_{ij}^2)^3
+  =
+  z_{ij}^3,
+\end{equation}
+et donc
+\begin{equation}
+  \frac{\cSix}{r_{ij}^6}
+  =
+  \frac{\cSix}{z_{ij}^3}.
+\end{equation}
+En sommant sur toutes les paires :
+\begin{equation}
+  \Eryd(\mathbf{x},Q)
+  =
+  \sum_{i<j}
+  \left(
+    \frac{\cSix}{z_{ij}^3}
+    - Q_{ij}
+  \right)^2.
+\end{equation}
+
+\paragraph{Problème optimisé.}
+\begin{equation}
+  \boxed{
+  \begin{aligned}
+    \min_{\mathbf{x} \in [0,L]^{n \times d}}
+    &\quad
+    \sum_{i<j}
+    \left(
+      \frac{\cSix}{z_{ij}^3}
+      - Q_{ij}
+    \right)^2
+    \\
+    \text{s.c.}
+    &\quad
+    z_{ij}
+    =
+    \norm{\mathbf{x}_i-\mathbf{x}_j}^2
+    \geq
+    z_{\min}.
+  \end{aligned}
+  }
+  \label{eq:standard}
+\end{equation}
+
+\begin{proposition}
+La formulation~\eqref{eq:standard} n'est pas équivalente au problème~\eqref{eq:objectif}
+car nous introduisons une constrainte supplémentaire sur les distances $z_{ij} \geq z_{\min}$ pour eviter les collisions.
+\end{proposition}
+
+
+
+\paragraph{Justification numérique.}
+La réécriture $\cSix/r_{ij}^6 = \cSix/z_{ij}^3$ évite d'introduire une
+racine carrée dans l'objectif : Ipopt manipule des expressions
+polynomiales en $z_{ij}$ et $\mathbf{x}$, ce qui stabilise les gradients.
+
+\subsection{Formulations \emph{simple} et \emph{simple square}}
+\label{sec:form-simple}
+
+\paragraph{Idée.}
+Au lieu de pénaliser l'écart sur les interactions $Q_{ij}$, on pénalise
+l'écart sur les distances. En effet, la relation physique
+\begin{equation}
+  Q_{ij}
+  =
+  \frac{\cSix}{r_{ij}^6}
+\end{equation}
+est équivalente, pour $Q_{ij}>0$, à
+\begin{equation}
+  r_{ij}
+  =
+  \left(
+    \frac{\cSix}{Q_{ij}}
+  \right)^{1/6}.
+\end{equation}
+On définit donc la \emph{distance cible}
+\begin{equation}
+  d_{ij}
+  :=
+  \left(
+    \frac{\cSix}{Q_{ij}}
+  \right)^{1/6}.
+  \label{eq:dij}
+\end{equation}
+
+\paragraph{Équivalence des zéros.}
+Pour une paire $(i,j)$ avec $r_{ij}>0$ et $Q_{ij}>0$ :
+\begin{align}
+  \frac{\cSix}{r_{ij}^6} - Q_{ij}
+  &=
+  0
+  \\
+  &\Longleftrightarrow
+  \quad
+  r_{ij}^6
+  =
+  \frac{\cSix}{Q_{ij}}
+  \\
+  &\Longleftrightarrow
+  \quad
+  r_{ij}
+  =
+  d_{ij}.
+\end{align}
+Par conséquent
+\begin{equation}
+  \Eryd(\mathbf{x},Q)
+  =
+  0
+  \quad\Longleftrightarrow\quad
+  r_{ij}
+  =
+  d_{ij}
+  \quad
+  \text{pour tout } i<j.
+\end{equation}
+Minimiser $\sum_{i<j}(r_{ij}-d_{ij})^2$ a donc les \emph{mêmes zéros}
+que~\eqref{eq:objectif}, tout en travaillant directement dans l'espace
+des distances.
+
+\paragraph{Formulation simple.}
+\begin{equation}
+  \boxed{
+  \begin{aligned}
+    \min_{\mathbf{x},\,r}
+    &\quad
+    \sum_{i<j}
+    (r_{ij}-d_{ij})^2
+    \\
+    \text{s.c.}
+    &\quad
+    r_{ij}
+    =
+    \norm{\mathbf{x}_i-\mathbf{x}_j},
+    \\
+    &\quad
+    d_{ij}
+    =
+    \left(
+      \frac{\cSix}{Q_{ij}}
+    \right)^{1/6},
+    \\
+    &\quad
+    z_{ij}
+    =
+    r_{ij}^2
+    \geq
+    z_{\min}.
+  \end{aligned}
+  }
+  \label{eq:simple}
+\end{equation}
+
+\begin{remark}
+L'objectif simple n'est \emph{pas} identique à $\Eryd$ : seuls les
+ensembles de zéros coïncident. Loin de $d_{ij}$, le paysage de coût
+diffère (pénalisation linéaire en distance au lieu de $1/r^6$).
+\end{remark}
+
+\paragraph{Formulation simple square.}
+Pour éviter la contrainte $r_{ij}=\sqrt{z_{ij}}$ (racine carrée),
+on travaille avec les carrés des distances. Identité algébrique :
+\begin{equation}
+  r_{ij}^2 - d_{ij}^2
+  =
+  (r_{ij}-d_{ij})\,(r_{ij}+d_{ij}).
+\end{equation}
+Donc, pour $r_{ij}>0$ et $d_{ij}>0$ :
+\begin{align}
+  r_{ij}^2 - d_{ij}^2
+  &=
+  0
+  \\
+  &\Longleftrightarrow
+  \quad
+  r_{ij}-d_{ij}
+  =
+  0
+  \\
+  &\Longleftrightarrow
+  \quad
+  r_{ij}
+  =
+  d_{ij}.
+\end{align}
+Les zéros de $\sum_{i<j}(r_{ij}^2-d_{ij}^2)^2$ coïncident donc avec
+ceux de~\eqref{eq:simple}. Le problème optimisé est
+\begin{equation}
+  \boxed{
+  \begin{aligned}
+    \min_{\mathbf{x},\,r}
+    &\quad
+    \sum_{i<j}
+    (r_{ij}^2-d_{ij}^2)^2
+    \\
+    \text{s.c.}
+    &\quad
+    r_{ij}^2
+    =
+    \norm{\mathbf{x}_i-\mathbf{x}_j}^2,
+    \\
+    &\quad
+    d_{ij}
+    =
+    \left(
+      \frac{\cSix}{Q_{ij}}
+    \right)^{1/6},
+    \\
+    &\quad
+    z_{ij}
+    \geq
+    z_{\min}.
+  \end{aligned}
+  }
+  \label{eq:simple-square}
+\end{equation}
+Le paysage d'optimisation diffère : on pénalise en $(r^2-d^2)^2$
+plutôt qu'en $(r-d)^2$, ce qui peut améliorer le conditionnement
+numérique près de la solution.
+
+\subsection{Formulation de Taylor}
+\label{sec:form-taylor}
+
+\paragraph{Point de départ.}
+Revenons à l'objectif original, paire par paire. Posons
+\begin{equation}
+  r_{ij}
+  =
+  \norm{\mathbf{x}_i-\mathbf{x}_j}
+\end{equation}
+et, avec $\cSix=1$ pour alléger les calculs,
+\begin{equation}
+  f_{ij}(r_{ij})
+  :=
+  \left(
+    \frac{1}{r_{ij}^6}
+    - Q_{ij}
+  \right)^2.
+  \label{eq:fij}
+\end{equation}
+Supposons que le point d'équilibre $d_{ij}$ vérifie
+\begin{equation}
+  \frac{1}{d_{ij}^6}
+  =
+  Q_{ij},
+\end{equation}
+soit
+\begin{equation}
+  d_{ij}
+  =
+  \left(
+    \frac{1}{Q_{ij}}
+  \right)^{1/6}.
+\end{equation}
+En ce point,
+\begin{equation}
+  f_{ij}(d_{ij})
+  =
+  0.
+\end{equation}
+
+\paragraph{Développement de Taylor au second ordre.}
+On développe $f_{ij}$ autour de $d_{ij}$ :
+\begin{equation}
+  f_{ij}(r_{ij})
+  \approx
+  f_{ij}(d_{ij})
+  +
+  (r_{ij}-d_{ij})\,f'_{ij}(d_{ij})
+  +
+  \frac{(r_{ij}-d_{ij})^2}{2}\,f''_{ij}(d_{ij}).
+  \label{eq:taylor-dev}
+\end{equation}
+
+\paragraph{1. Dérivée première.}
+En dérivant~\eqref{eq:fij} :
+\begin{equation}
+  f'_{ij}(r_{ij})
+  =
+  2
+  \left(
+    \frac{1}{r_{ij}^6}
+    - Q_{ij}
+  \right)
+  \cdot
+  \left(
+    -\frac{6}{r_{ij}^7}
+  \right),
+\end{equation}
+soit
+\begin{equation}
+  f'_{ij}(r_{ij})
+  =
+  -\frac{12}{r_{ij}^7}
+  \left(
+    \frac{1}{r_{ij}^6}
+    - Q_{ij}
+  \right).
+\end{equation}
+À l'équilibre $r_{ij}=d_{ij}$,
+\begin{equation}
+  \frac{1}{d_{ij}^6}
+  - Q_{ij}
+  =
+  0,
+\end{equation}
+donc
+\begin{equation}
+  f'_{ij}(d_{ij})
+  =
+  0.
+\end{equation}
+
+\paragraph{2. Dérivée seconde.}
+Partons de
+\begin{equation}
+  f'_{ij}(r)
+  =
+  -\frac{12}{r^7}
+  \left(
+    \frac{1}{r^6}
+    - Q_{ij}
+  \right)
+  =
+  -\frac{12}{r^{13}}
+  +
+  \frac{12\,Q_{ij}}{r^7}.
+\end{equation}
+En dérivant terme à terme :
+\begin{equation}
+  f''_{ij}(r)
+  =
+  12\cdot 13\,r^{-14}
+  -
+  12\,Q_{ij}\cdot 7\,r^{-8},
+\end{equation}
+soit
+\begin{equation}
+  f''_{ij}(r)
+  =
+  \frac{156}{r^{14}}
+  -
+  \frac{84\,Q_{ij}}{r^{8}}.
+\end{equation}
+À l'équilibre $r=d_{ij}$, on a $Q_{ij}=1/d_{ij}^6$, d'où
+\begin{equation}
+  f''_{ij}(d_{ij})
+  =
+  \frac{156}{d_{ij}^{14}}
+  -
+  \frac{84}{d_{ij}^{6}\,d_{ij}^{8}}
+  =
+  \frac{156}{d_{ij}^{14}}
+  -
+  \frac{84}{d_{ij}^{14}}
+  =
+  \frac{72}{d_{ij}^{14}}.
+\end{equation}
+
+\paragraph{3. Substitution dans le développement.}
+En reportant dans~\eqref{eq:taylor-dev} :
+\begin{equation}
+  f_{ij}(r_{ij})
+  =
+  \underbrace{f_{ij}(d_{ij})}_{=0}
+  +
+  (r_{ij}-d_{ij})\cdot
+  \underbrace{f'_{ij}(d_{ij})}_{=0}
+  +
+  \frac{(r_{ij}-d_{ij})^2}{2}
+  \cdot
+  \frac{72}{d_{ij}^{14}}.
+\end{equation}
+On obtient donc l'approximation quadratique
+\begin{equation}
+  f_{ij}(r_{ij})
+  \approx
+  \frac{36}{d_{ij}^{14}}
+  (r_{ij}-d_{ij})^2.
+  \label{eq:taylor-approx}
+\end{equation}
+
+\paragraph{Problème optimisé (Taylor).}
+En sommant sur toutes les paires :
+\begin{equation}
+  \boxed{
+  \begin{aligned}
+    \min_{\mathbf{x},\,r}
+    &\quad
+    \sum_{i<j}
+    \frac{36}{d_{ij}^{14}}
+    (r_{ij}-d_{ij})^2
+    \\
+    \text{s.c.}
+    &\quad
+    r_{ij}
+    =
+    \norm{\mathbf{x}_i-\mathbf{x}_j},
+    \\
+    &\quad
+    d_{ij}
+    =
+    Q_{ij}^{-1/6},
+    \\
+    &\quad
+    z_{ij}
+    \geq
+    z_{\min}.
+  \end{aligned}
+  }
+  \label{eq:taylor}
+\end{equation}
+On reconnaît la formulation simple~\eqref{eq:simple} pondérée par le
+facteur $36/d_{ij}^{14}$ .
+
+\paragraph{Variante Taylor square.}
+On utilise l'identité
+\begin{equation}
+  r_{ij}^2 - d_{ij}^2
+  =
+  (r_{ij}-d_{ij})\,(r_{ij}+d_{ij}).
+\end{equation}
+Pour $r_{ij}>0$ et $d_{ij}>0$ :
+\begin{align}
+  r_{ij}
+  &=
+  d_{ij}
+  \\
+  &\Longleftrightarrow
+  \quad
+  r_{ij}^2
+  =
+  d_{ij}^2
+  \\
+  &\Longleftrightarrow
+  \quad
+  r_{ij}^2 - d_{ij}^2
+  =
+  0.
+\end{align}
+Les zéros de $(r_{ij}-d_{ij})^2$ et de $(r_{ij}^2-d_{ij}^2)^2$ coïncident
+donc. En remplaçant $(r_{ij}-d_{ij})^2$ par $(r_{ij}^2-d_{ij}^2)^2$
+dans~\eqref{eq:taylor}, on obtient une variante sans racine carrée :
+\begin{equation}
+  \boxed{
+  \begin{aligned}
+    \min_{\mathbf{x},\,r}
+    &\quad
+    \sum_{i<j}
+    \frac{36}{d_{ij}^{14}}
+    (r_{ij}^2-d_{ij}^2)^2
+    \\
+    \text{s.c.}
+    &\quad
+    r_{ij}^2
+    =
+    \norm{\mathbf{x}_i-\mathbf{x}_j}^2,
+    \\
+    &\quad
+    d_{ij}
+    =
+    Q_{ij}^{-1/6},
+    \\
+    &\quad
+    z_{ij}
+    \geq
+    z_{\min}.
+  \end{aligned}
+  }
+  \label{eq:taylor-square}
+\end{equation}
+
+\begin{remark}
+La formulation de Taylor est une \emph{approximation locale} valide près
+de $d_{ij}$. Elle approxime le paysage de coût autour de la solution
+attendue et peut accélérer la convergence, mais perd sa validité loin
+de $d_{ij}$.
+\end{remark}
+
+\subsection{Synthèse des formulations}
+\label{sec:form-synthese}
+
+\begin{center}
+\small
+\begin{tabular}{@{}llll@{}}
+  \toprule
+  Formulation & Objectif & Variables clés & Équivalence exacte \\
+  \midrule
+  Standard       & $\sum(\cSix/z^3-Q)^2$        & $\mathbf{x}$           & Oui \\
+  Simple         & $\sum(r_{ij}-d_{ij})^2$                 & $\mathbf{x},r$         & Aux minimas \\
+  Simple square  & $\sum(r_{ij}^2-d_{ij}^2)^2$            & $\mathbf{x},r$         & Aux minimas \\
+  Taylor         & $\sum \tfrac{36}{d_{ij}^{14}}(r_{ij}-d_{ij})^2$ & $\mathbf{x},r$      & Approx. \\
+  Taylor square  & $\sum \tfrac{36}{d_{ij}^{14}}(r_{ij}^2-d_{ij}^2)^2$ & $\mathbf{x},r$ & Approx. \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\section{MDS spectral généralisé}
+\label{sec:mds}
+
+\subsection{Formulation}
+\label{sec:mds-formulation}
+
+Le MDS (Multidimensional Scaling) résout un problème de \emph{realization}
+euclidienne : étant donné des distances cibles $r_{ij}$, trouver des points
+$\mathbf{x}_i \in \R^d$ tels que $\norm{\mathbf{x}_i-\mathbf{x}_j}=r_{ij}$.
+Pour le potentiel de Rydberg, on inverse~\eqref{eq:rydberg}.
+
+\paragraph{Démonstration de l'inversion $Q \to r_{ij}$.}
+De $Q_{ij}=\cSix/r_{ij}^6$, on obtient successivement :
+\begin{align}
+  r_{ij}^6 &= \frac{\cSix}{Q_{ij}}, &
+  r_{ij} &= \left(\frac{\cSix}{Q_{ij}}\right)^{1/6}, \label{eq:mds-rij}\\
+  r_{ij}^2 &= \left(\frac{\cSix}{Q_{ij}}\right)^{1/3}
+  = \cSix^{1/3}\,Q_{ij}^{-1/3}. \notag
+\end{align}
+On définit la matrice de distances au carré entrée du MDS :
+\begin{equation}
+  D^2_{ij} := r_{ij}^2 = \cSix^{1/3}\,Q_{ij}^{-1/3},
+  \quad i \neq j; \qquad D^2_{ii} = 0.
+  \label{eq:D2}
+\end{equation}
+
+\subsection{Théorème de Young--Householder}
+\label{sec:mds-yh}
+
+Soit $\{\mathbf{x}_i\}_{i=1}^n \subset \R^d$ un nuage centré
+($\sum_i \mathbf{x}_i = \mathbf{0}$) et $D^2_{ij}=\norm{\mathbf{x}_i-\mathbf{x}_j}^2$.
+
+\begin{theorem}[Young--Householder, 1938]
+\label{thm:yh}
+La matrice de Gram $B_{ij} := \mathbf{x}_i^\top \mathbf{x}_j$ vérifie
+\begin{equation}
+  B = -\tfrac{1}{2}\,H D^2 H,
+  \qquad H = I_n - \tfrac{1}{n}\mathbf{1}\mathbf{1}^\top.
+  \label{eq:B}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Développons $D^2_{ij}=\norm{\mathbf{x}_i-\mathbf{x}_j}^2
+= \norm{\mathbf{x}_i}^2 - 2\mathbf{x}_i^\top\mathbf{x}_j + \norm{\mathbf{x}_j}^2
+= B_{ii} - 2B_{ij} + B_{jj}$.
+Les moyennes en ligne, colonne et globale, avec $\sum_k B_{ik}=\mathbf{x}_i^\top\sum_k\mathbf{x}_k=0$
+(centrage), donnent
+$\overline{D^2}_{i\cdot}=B_{ii}+\overline{B}_{\cdot\cdot}$,
+$\overline{D^2}_{\cdot j}=B_{jj}+\overline{B}_{\cdot\cdot}$,
+$\overline{D^2}_{\cdot\cdot}=2\overline{B}_{\cdot\cdot}$.
+En substituant dans $-\tfrac{1}{2}(D^2_{ij}-\overline{D^2}_{i\cdot}-\overline{D^2}_{\cdot j}+\overline{D^2}_{\cdot\cdot})$,
+tous les termes diagonaux s'annulent et il reste $B_{ij}$.
+\end{proof}
+
+En indices, le double centrage s'écrit :
+\begin{equation}
+  B_{ij} = -\frac{\cSix^{1/3}}{2}\left(
+    Q_{ij}^{-1/3}
+    - \overline{(Q^{-1/3})}_{i\cdot}
+    - \overline{(Q^{-1/3})}_{\cdot j}
+    + \overline{(Q^{-1/3})}_{\cdot\cdot}
+  \right).
+  \label{eq:Bij}
+\end{equation}
+
+\subsection{Condition de réalisabilité euclidienne}
+
+\begin{theorem}[Schoenberg, 1935]
+\label{thm:schoenberg}
+Une matrice $D^2$ (symétrique, diagonale nulle) provient d'une géométrie
+euclidienne de dimension $d$ si et seulement si
+$B = -\tfrac{1}{2} H D^2 H \succeq 0$ et $\mathrm{rank}(B) \leq d$.
+\end{theorem}
+
+Si $Q$ est exacte et provient d'un nuage en $\R^2$, alors $B \succeq 0$ de
+rang~2. Sous bruit, $B$ peut admettre des valeurs propres négatives : $D^2$
+n'est plus une matrice de distances euclidiennes exactes.
+
+\subsection{Algorithme MDS spectral (\texttt{solve\_mds})}
+\label{sec:mds-algo}
+
+\paragraph{Étape A : Transformation.}
+$Q \mapsto D^2$ via~\eqref{eq:D2} (élément par élément).
+
+\paragraph{Étape B : Double centrage.}
+$B = -\tfrac{1}{2} H D^2 H$.
+
+\paragraph{Étape C : Décomposition spectrale.}
+$B = V \Lambda V^\top$,
+$\Lambda = \mathrm{diag}(\lambda_1 \geq \cdots \geq \lambda_n)$.
+
+\paragraph{Étape D : Projection PSD (si bruit).}
+Si $\lambda_k < 0$, on pose $\lambda_k^+ = \max(\lambda_k, 0)$ et
+$B^+ = V \Lambda^+ V^\top$, la meilleure approximation PSD au sens de
+Frobenius.
+
+\paragraph{Étape E : Embedding en dimension~2.}
+\begin{equation}
+  X = V_{:,1:2}\,\mathrm{diag}\!\bigl(\sqrt{\lambda_1^+},\sqrt{\lambda_2^+}\bigr)
+  \in \R^{n \times 2}.
+  \label{eq:mds-embed}
+\end{equation}
+
+\begin{proposition}
+Si $Q$ est exacte et provient d'une configuration euclidienne en
+$\R^2$, alors~\eqref{eq:mds-embed} retrouve cette configuration à une
+isométrie près, et $\Eryd \approx 0$ à la précision machine.
+\end{proposition}
+
+\begin{proof}
+Exactitude de $D^2$ $\Rightarrow$ $B \succeq 0$ de rang~2
+(théorème~\ref{thm:schoenberg}). Les deux racines $\sqrt{\lambda_1},\sqrt{\lambda_2}$
+donnent les coordonnées dans la base propre ; toute autre base orthonormale
+de ce plan diffère par une isométrie. Comme $r_{ij}$ est reconstruit
+exactement par~\eqref{eq:mds-rij}, on a $Q_{ij}=\cSix/r_{ij}^6$ exactement.
+\end{proof}
+
+\begin{remark}[Différence avec le MDS classique]
+\begin{center}
+\small
+\begin{tabular}{@{}lcc@{}}
+  \toprule
+  & MDS classique & MDS Rydberg \\
+  \midrule
+  Entrée & $D^2_{ij}=\norm{\mathbf{x}_i-\mathbf{x}_j}^2$ & $D^2_{ij}=\cSix^{1/3}Q_{ij}^{-1/3}$ \\
+  $B \succeq 0$ ? & Toujours (si $D^2$ exacte) & Oui si $Q$ exacte \\
+  Projection PSD & Inutile & Nécessaire si bruit \\
+  Résultat & Géométrie exacte & Exacte si $Q$ parfait, approchée sinon \\
+  \bottomrule
+\end{tabular}
+\end{center}
+\end{remark}
+
+\section{Choix de l'échelle \texorpdfstring{$L$}{L}}
+\label{sec:L}
+
+\subsection{Rôle de \texorpdfstring{$L$}{L}}
+Dans le benchmark, $L$ contrôle (i)~la génération des positions de référence
+$\mathbf{x}_i \in [0,L]^d$, (ii)~les bornes des variables pour certaines
+formulations, (iii)~la qualité des points initiaux Ipopt.
+
+\subsection{Trois stratégies}
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+  \toprule
+  Régime & Formule & Interprétation \\
+  \midrule
+  \texttt{L\_fixe}      & $L = 10$ & Échelle constante de référence \\
+  \texttt{L\_adaptatif} & $L = 100\sqrt{n}$ & Croissance avec la densité \\
+  \texttt{L\_optimal}   & $L = (\cSix/\max_{i<j} Q_{ij})^{1/6}$ & Lié à $r_{\min}$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Fenêtre admissible}
+En imposant $Q_{\min} \leq Q_{ij} \leq Q_{\max}$ et une séparation minimale
+$r$ entre atomes dans $[0,L]^d$, on obtient heuristiquement
+\begin{equation}
+  r\sqrt{n} \leq L \leq \frac{1}{\sqrt{d}}\left(\frac{\cSix}{Q_{\min}}\right)^{1/6}.
+\end{equation}
+Un $L$ trop grand rend les $Q_{ij}$ des paires éloignées négligeables
+(perte d'information, cf.~\eqref{eq:sens-inverse}) ; un $L$ trop petit
+contraint excessivement la géométrie.
+
+\begin{remark}
+La stratégie \texttt{L\_optimal} implémentée utilise $L = r_{\min}$ dérivé
+de la plus forte interaction observée. Elle optimise implicitement le RMSE
+plutôt que $\Eryd$, ce qui explique les écarts observés entre les deux
+métriques (section~\ref{sec:discussion}).
+\end{remark}
+
+\section{Protocole expérimental}
+\label{sec:protocole}
+
+Nous distinguons \textbf{quatre campagnes de benchmark} complémentaires.
+Les trois premières (sections~\ref{sec:exp1}--\ref{sec:exp3}) évaluent les
+six formulations retenues (Standard, Simple, Simple$^2$, Taylor,
+Taylor$^2$, MDS exact) sous trois régimes $L$ (fixe, adaptatif, optimal).
+La quatrième (section~\ref{sec:exp4}) traite $L$ comme variable avec
+pénalité $\alpha L$. La métrique principale est
+$\mathcal{E}_{\mathrm{Ryd}}(\hat{\mathbf{x}}, Q)$ ; le statut Ipopt
+(\texttt{LOCALLY\_SOLVED}, \texttt{ITERATION\_LIMIT}, \texttt{ÉCHEC}, etc.)
+est rapporté dans les annexes.
+
+\subsection{Expérience~1 : $Q$ aléatoire (\texttt{Q\_bruit\_dist})}
+\label{sec:exp1}
+On génère une matrice $Q$ \emph{sans} référence géométrique explicite :
+\texttt{Q\_bruit\_dist} produit des distances aléatoires uniformes dans
+$[0,L]^d$, puis $Q_{ij} = \cSix/r_{ij}^6$. L'objectif est de retrouver
+des positions $\hat{\mathbf{x}}$ qui \emph{reconstituent} cette $Q$
+au sens de~\eqref{eq:objectif}. Cette expérience teste la capacité
+d'ajustement des formulations lorsque $Q$ n'est pas garantie euclidienne
+(exacte). Paramètres : $n \in \{4,10,20,30,50\}$, 10 instances
+indépendantes, $d_{\min} = 0.2$.
+
+\subsection{Expérience~2 : $Q$ exacte synthétique}
+\label{sec:exp2}
+On tire $\mathbf{x}^{\mathrm{ref}}$ sans collision, calcule
+$Q_{ij} = \cSix/\norm{\mathbf{x}^{\mathrm{ref}}_i-\mathbf{x}^{\mathrm{ref}}_j}^6$
+(exacte par construction), puis tente de retrouver $Q$ à partir de
+$\hat{\mathbf{x}}$. Paramètres : $n \in \{4,10,20,30,50\}$, 10 instances
+indépendantes, $d_{\min} = 0.2$.
+
+\subsection{Expérience~3 : instances Pasqal (GML)}
+\label{sec:exp3}
+Instances réelles fournies par Pasqal (Paris) : graphes d'interaction
+$Q_{ij}$ calculés sur un potentiel van der Waals physique, au format GML.
+Trois géométries de réseau (\texttt{freespace}, \texttt{sqauare},
+\texttt{triangle}), $n = 25$ atomes, 300 arêtes actives, 16 fichiers
+par géométrie. $Q$ est exacte mais \emph{sparse} : seules les arêtes du
+graphe portent une interaction non nulle. Fichier :
+\texttt{pasqal\_gml\_benchmark.csv}.
+
+\subsection{Expérience~4 : $L$ variable et pénalité $\alpha L$}
+\label{sec:exp4}
+Au lieu de fixer $L$ a priori, on traite $L$ comme variable de décision et
+on pénalise sa taille :
+\begin{equation}
+  \min_{\mathbf{x},L}\; f(\mathbf{x}) + \alpha L
+  \qquad\text{s.c.}\qquad
+  0 \leq x_{ik} \leq L,\quad
+  \norm{\mathbf{x}_i-\mathbf{x}_j}\ge z_{\min}
+  \quad (i<j),
+  \label{eq:lvar-obj}
+\end{equation}
+où $f$ est l'une des formulations NLP retenues (Standard, Simple,
+Simple$^2$, Taylor, Taylor$^2$) et
+\begin{equation}
+  z_{\min}^{\mathrm{opt}}
+  = \Bigl(\frac{\cSix}{Q_{\max}}\Bigr)^{1/6},
+  \qquad
+  Q_{\max}=\max_{i<j} Q_{ij}.
+  \label{eq:zmin-opt}
+\end{equation}
+Deux variantes sont comparées : \emph{avec} contrainte
+$z_{\min}=z_{\min}^{\mathrm{opt}}$, et \emph{sans} contrainte de distance
+(vérification a posteriori : $d_{\min}(\hat{\mathbf{x}})\approx z_{\min}^{\mathrm{opt}}$).
+Les trois sources de $Q$ sont reprises dans l'ordre Pasqal (48 GML) $\to$
+synthétique exacte (5 instances, $n\in\{4,10\}$) $\to$ aléatoire
+(\texttt{Q\_bruit\_dist}). Paramètres :
+$\alpha\in\{10^{-6},10^{-4},10^{-2},1,5,10\}$, $L_{\mathrm{init}}=10$,
+$L_{\mathrm{choisi}}=10$.
+
+\paragraph{Scaling cohérent.}
+Si la solution optimale $L^\star$ dépasse $L_{\mathrm{choisi}}$, on applique
+\begin{equation}
+  \lambda=\frac{L_{\mathrm{choisi}}}{L^\star},\quad
+  \mathbf{x}'=\lambda\mathbf{x}^\star,\quad
+  z_{\min}'=\lambda z_{\min},\quad
+  Q'=Q/\lambda^{6}\,;
+  \label{eq:scaling-coherent}
+\end{equation}
+si $L_{\mathrm{choisi}}\ge L^\star$, aucune transformation n'est effectuée
+(la configuration tient déjà dans la boîte cible).
+
+\subsection{Stratégies de résolution}
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+  \item \textbf{Single} : un point initial (MDS si disponible, sinon aléatoire).
+  \item \textbf{Multistart} : $n_{\mathrm{rs}} \in \{5,3,2\}$ essais selon $n$.
+  \item \textbf{MDS exact} : une passe algébrique.
+\end{itemize}
+
+\subsection{Implémentation}
+Code Julia~1.x, JuMP, Ipopt. Paramètres : $\cSix = 1$, $d = 2$,
+$d_{\min} = \sqrt{z_{\min}}$ avec $z_{\min} = 0.04$ (resp.\ $0.0016$ selon
+formulation). Les résultats sont exportés en CSV et visualisés dans
+\texttt{visualization.ipynb}.
+
+\section{Résultats}
+\label{sec:resultats}
+
+\subsection{Expérience~1 : reconstitution de $Q$ aléatoire}
+\label{sec:res-exp1}
+
+Le tableau~\ref{tab:exp1-best} synthétise, pour chaque couple $(n,L)$,
+la formulation minimisant $\mathcal{E}_{\mathrm{Ryd}}$ en moyenne sur
+10 instances. Les tableaux détaillés (6 formulations $\times$ 15
+configurations) et les 10 jeux de résultats bruts par instance figurent
+en annexes (fichiers \texttt{tables/exp1\_appendix\_*.tex}).
+
+\input{tables/exp1_main}
+
+\paragraph{Observations.}
+(i)~Pour $n=4$ et $L$ adaptatif, Taylor$^2$ atteint $10^{-15}$
+alors que le MDS exact reste à $10^{-11}$.
+(ii)~Dès $n \geq 10$ avec $L$ fixe, toutes les méthodes (y compris MDS)
+échouent à reconstruire $Q$ aléatoire ($\mathcal{E}_{\mathrm{Ryd}} \gg 1$) :
+$Q$ n'est en général \emph{pas} euclidienne.
+(iii)~En $L$ adaptatif, Taylor domine pour $n \in \{10,20,30\}$
+($\mathcal{E}_{\mathrm{Ryd}}$ de $10^{-10}$ à $10^{15}$ selon $n$).
+(iv)~En $L$ optimal, Standard et Taylor restent les NLP les plus compétitives
+pour $n$ petit ; pour $n \geq 20$, le MDS exact obtient souvent la meilleure
+moyenne parmi les six formulations retenues.
+
+\subsection{Expérience~2 : $Q$ exacte synthétique}
+\label{sec:res-exp2}
+
+Le tableau~\ref{tab:exp2-best} synthétise, pour chaque couple $(n,L)$,
+la méthode minimisant $\mathcal{E}_{\mathrm{Ryd}}$ en moyenne sur
+10 instances, ainsi que la meilleure formulation NLP (hors MDS exact).
+Les tableaux détaillés (6 formulations $\times$ 3 stratégies $\times$
+15 configurations) et les 10 jeux de résultats bruts par instance figurent
+en annexes (fichiers \texttt{tables/exp2\_appendix\_*.tex}).
+
+\input{tables/exp2_main}
+
+\paragraph{Observations.}
+(i)~Le MDS exact domine systématiquement en $\mathcal{E}_{\mathrm{Ryd}}$
+($10^{-15}$--$10^{-41}$) et en temps ($<1$\,ms), confirmant la structure
+euclidienne exacte de $Q$.
+(ii)~En $L$ fixe, les NLP atteignent parfois une faible $\mathcal{E}_{\mathrm{Ryd}}$
+mais avec un RMSE élevé ($\sim 1$) : la configuration est étirée dans la boîte.
+(iii)~En $L$ adaptatif, Simple$^2$ et Simple obtiennent les meilleures
+$\mathcal{E}_{\mathrm{Ryd}}$ NLP ($10^{-19}$--$10^{-39}$) ; le MDS reste la seule
+méthode géométriquement fidèle (RMSE $\sim 10^{-13}$).
+(iv)~En $L$ optimal, Simple, Simple$^2$ et Standard sont compétitives en NLP
+pour $n$ petit ($\mathcal{E}_{\mathrm{Ryd}} \sim 10^{-18}$--$10^{9}$ selon $n$).
+
+\subsection{Expérience~3 : instances Pasqal}
+\label{sec:res-exp3}
+
+Sur les graphes Pasqal ($n=25$, $Q$ physique exacte mais sparse),
+le MDS exact atteint $\mathcal{E}_{\mathrm{Ryd}} \sim 10^{-26}$ en
+moins de 1\,ms pour \emph{toutes} les géométries et régimes $L$
+(tableau~\ref{tab:exp3-pasqal}). Les formulations NLP performantes
+dépendent du régime :
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+  \item $L$ fixe : Standard et Simple ($10^{-21}$--$10^{-25}$) ;
+  \item $L$ adaptatif : Simple et Simple$^2$ ($10^{-11}$--$10^{-19}$) ;
+  \item $L$ optimal : Standard et Simple$^2$ ($10^{-23}$--$10^{-25}$).
+\end{itemize}
+L'annexe (fichier \texttt{tables/exp3\_appendix.tex}) recense les 864 runs
+(48 fichiers GML $\times$ 6 formulations $\times$ 3 régimes $L$).
+
+\input{tables/exp3_main}
+
+\paragraph{Synthèse visuelle — régimes $L$ fixe / adaptatif / optimal.}
+Les figures~\ref{fig:lregime-winners}--\ref{fig:lregime-heatmap}
+résument, pour les trois expériences, quelle formulation minimise
+$\Eryd$ selon le choix de $L$ :
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+  \item \textbf{Exp.~1 ($Q$ aléatoire).}
+        En $L$ adaptatif, \textbf{Taylor} (puis Taylor$^2$) domine clairement ;
+        en $L$ fixe / optimal, les erreurs restent élevées (données non euclidiennes)
+        et Standard / Simple sont les NLP les moins mauvaises.
+  \item \textbf{Exp.~2 ($Q$ synthétique).}
+        \textbf{MDS exact} gagne presque partout ; parmi les NLP,
+        Simple$^2$ / Simple excellent en $L$ adaptatif,
+        Standard reste compétitif en $L$ fixe / optimal.
+  \item \textbf{Exp.~3 (Pasqal).}
+        \textbf{MDS exact} reste imbattable ; meilleures NLP :
+        Standard (fixe / optimal) et Simple (adaptatif).
+\end{itemize}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{figures/lregime_winners.pdf}
+  \caption{Meilleure formulation selon le régime $L$ (fixe / adaptatif / optimal)
+  pour les trois expériences. Gauche : gagnant global (MDS inclus) ;
+  droite : meilleur NLP hors MDS.}
+  \label{fig:lregime-winners}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/lregime_bars_3exp.pdf}
+  \caption{Comparaison des formulations pour chaque couple
+  (expérience $\times$ régime $L$). Barre encadrée = meilleur global ;
+  hachures = meilleur NLP hors MDS.}
+  \label{fig:lregime-bars}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/lregime_nlp_heatmap.pdf}
+  \caption{Carte $\log_{10}\Eryd$ des formulations NLP (hors MDS).
+  L'étoile marque la meilleure NLP de chaque régime $L$.}
+  \label{fig:lregime-heatmap}
+\end{figure}
+
+\subsection{Expérience~4 : $L$ variable et $\alpha L$}
+\label{sec:res-exp4}
+
+On compare les cinq formulations NLP lorsque $L$ est une variable de décision
+et que l'objectif contient la pénalité $\alpha L$, avec ou sans contrainte
+$\|x_i-x_j\|\ge z_{\min}^{\mathrm{opt}}$.
+Les trois jeux de données de l'expérience~4 sont retenus :
+Pasqal, synthétique et aléatoire.
+Le tableau~\ref{tab:lalpha-overview} les compare.
+Les deux derniers sont maintenant étendus via
+\texttt{exp\_L\_alpha\_full\_results\_n4\_50.csv}, qui couvre
+$n\in\{4,10,20,30,40,50\}$ pour le synthétique et $n\in\{4,10,20,30,40\}$
+pour l'aléatoire.
+
+\input{tables/exp_lalpha_overview}
+\input{tables/exp_lalpha_pasqal}
+\input{tables/exp_lalpha_synth}
+\input{tables/exp_lalpha_random}
+
+\paragraph{Quelle formulation est la meilleure ?}
+Les figures~\ref{fig:lalpha-winners}--\ref{fig:lalpha-alpha}
+résument, sur les trois jeux de données, le classement des formulations.
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+  \item \textbf{Pasqal ($\alpha L$, $n=25$, 48~GML).}
+    Toutes les formulations atteignent $100\%$ de concordance pour
+    $\alpha\le 10^{-2}$. En erreur Rydberg, Taylor$^2$ (puis
+    Simple$^2$ / Taylor) est le plus précis sur ces graphes sparses.
+  \item \textbf{Synthétique.} L'extension $n\le 50$ confirme la même hiérarchie
+    globale pour les petites pénalités : Simple$^2$ et Taylor$^2$ dominent
+    quand la contrainte $z_{\min}$ est active, tandis que Taylor peut devenir
+    instable sans cette contrainte quand $\alpha$ augmente.
+  \item \textbf{Aléatoire.} Les runs étendus montrent une dispersion plus forte,
+    mais le diagnostic reste le même : les formulations quadratiques sont
+    plus robustes, alors que les variantes Taylor sans $z_{\min}$ peuvent
+    se dégrader nettement sur certaines valeurs de $\alpha$.
+\end{itemize}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{figures/lalpha_winners.pdf}
+  \caption{Formulation minimisant la médiane de $\Eryd$ pour
+  $\alpha=10^{-4}$ sur Pasqal, synthétique et aléatoire, avec et sans
+  $z_{\min}$.
+  Données retenues ici : \texttt{exp\_L\_alpha\_full\_results.csv} pour Pasqal,
+  et \texttt{exp\_L\_alpha\_full\_results\_n4\_50.csv} pour les deux autres
+  jeux de données.}
+  \label{fig:lalpha-winners}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/lalpha_best_err_by_source.pdf}
+  \caption{Médiane de $\Eryd$ par formulation sur Pasqal ($\alpha=10^{-4}$).
+  Barres foncées : avec $z_{\min}$ ; barres claires : sans $z_{\min}$.
+  La meilleure barre de chaque groupe est soulignée.
+  Les trois panneaux correspondent à Pasqal, synthétique et aléatoire.}
+  \label{fig:lalpha-best-err}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/lalpha_match_by_source.pdf}
+  \caption{Taux de concordance
+  $d_{\min}\approx z_{\min}^{\mathrm{opt}}$
+  ($|d_{\min}-z_{\min}|/z_{\min}<0{,}2$) sur Pasqal, synthétique et aléatoire,
+  pour $\alpha=10^{-4}$.}
+  \label{fig:lalpha-match}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/lalpha_err_vs_alpha.pdf}
+  \caption{Sensibilité à $\alpha$ : médiane de $\Eryd$ (échelle log)
+  avec contrainte $z_{\min}$, sur Pasqal, synthétique et aléatoire.}
+  \label{fig:lalpha-alpha}
+\end{figure}
+
+\paragraph{Observations complémentaires.}
+(i)~\textbf{Pasqal.} Pour $\alpha\le 10^{-2}$, toutes les formulations
+atteignent $100\%$ de concordance $d_{\min}\approx z_{\min}^{\mathrm{opt}}$
+(avec \emph{et} sans contrainte $z_{\min}$), avec $\Eryd$ médiane souvent
+sous $10^{-10}$ pour $\alpha=10^{-4}$.
+(ii)~\textbf{Synthétique.} Les formules quadratiques restent les plus régulières
+sur $n\le 50$ et la contrainte $z_{\min}$ continue de stabiliser les variantes
+Taylor quand $\alpha$ augmente.
+(iii)~\textbf{Aléatoire.} Le run étendu renforce le contraste entre
+les formulations robustes et celles qui divergent sans contrainte,
+en particulier sur les plus grandes valeurs de $\alpha$.
+
+\section{Discussion}
+\label{sec:discussion}
+
+\paragraph{MDS vs NLP.}
+Sur données exactes, le MDS exact est imbattable en précision et en temps :
+il exploite directement la structure euclidienne induite par~\eqref{eq:D2}.
+Les NLP deviennent indispensables lorsque des contraintes expérimentales
+(bornes, topologie sparse type instances Pasqal) brisent l'hypothèse MDS.
+
+\paragraph{Dissociation $\Eryd$ / RMSE.}
+Un $L$ trop grand ($L = 100\sqrt{n}$) produit des $\Eryd$ infinitésimales
+mais des RMSE de l'ordre de $10^2$ (expérience~1, $n=4$, $L$ adaptatif) : le solveur
+«~étire~» la configuration pour annihiler les termes $1/r_{ij}^6$ sans
+reproduire la géométrie de référence. \texttt{L\_optimal}, calibré sur
+$r_{\min}$, améliore le RMSE mais peut dégrader certaines NLP.
+
+\paragraph{Taylor vs Simple.}
+Taylor (et Taylor$^2$) excellent lorsque $Q$ est proche d'une réalisation
+euclidienne et que l'initialisation est près de $d_{ij}$ ; Simple et
+Simple$^2$ sont plus robustes sur les graphes Pasqal sparses et en régime
+$L$ adaptatif.
+
+\paragraph{$L$ variable et $\alpha L$.}
+Traiter $L$ comme variable avec pénalité $\alpha L$ et
+$z_{\min}^{\mathrm{opt}}=(\cSix/Q_{\max})^{1/6}$ permet de découvrir
+l'échelle sans la fixer a priori.
+Sur $Q$ exacte synthétique, Simple$^2$ (puis Simple) est le meilleur
+choix ; sur Pasqal, Taylor$^2$ / Simple$^2$ ; sur $Q$ aléatoire, Standard.
+Un $\alpha$ petit ($10^{-6}$--$10^{-4}$) conserve une $\Eryd$ faible tout
+en reproduisant $z_{\min}^{\mathrm{opt}}$ \emph{même sans} imposer la
+contrainte de distance (surtout Simple / Simple$^2$ sur données exactes).
+Taylor sans $z_{\min}$ est fragile (poids $36\,Q^{7/3}$).
+Le scaling cohérent~\eqref{eq:scaling-coherent} remet ensuite
+la solution dans une boîte $L_{\mathrm{choisi}}$ sans casser le modèle
+Rydberg ($Q'=Q/\lambda^6$).
+Voir figures~\ref{fig:lalpha-winners}--\ref{fig:lalpha-alpha}.
+
+\paragraph{Perspectives.}
+(i)~Normaliser les coordonnées dans $[0,1]^d$ avant optimisation puis
+remonter à l'échelle physique~\cite{henry2024}.
+(ii)~Coupler MDS (initialisation) + raffinement NLP contraint.
+(iii)~Calibrer $\alpha$ automatiquement (par ex.\ continuation) et étendre
+le protocole $L$ variable à $n$ plus grands.
+(iv)~Extension $d=3$ et prise en compte de la décroissance $1/r^3$ dipolaire.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+Nous avons formalisé et benchmarké le problème inverse de reconstruction
+de positions d'atomes de Rydberg à partir d'interactions van der Waals.
+Six formulations couvrent le spectre direct (Standard), lifté (Simple,
+Simple$^2$), approximé (Taylor, Taylor$^2$) et algébrique (MDS). Deux métriques
+--- $\Eryd$ et RMSE --- sont nécessaires pour
+évaluer respectivement la cohérence physique et la fidélité géométrique.
+Le MDS spectral avec projection PSD domine sur données exactes ; le choix
+de $L$ est aussi déterminant que le choix de formulation. En traitant $L$
+comme variable avec pénalité $\alpha L$ et
+$z_{\min}^{\mathrm{opt}}=(\cSix/Q_{\max})^{1/6}$, on retrouve sur Pasqal
+et $Q$ exacte une échelle cohérente et, pour Simple / Simple$^2$, la
+distance minimale optimale même sans contrainte explicite. Les travaux futurs
+porteront sur le calibrage de $\alpha$ et l'hybridation MDS--NLP pour
+données bruitées et contraintes expérimentales.
+
+\paragraph{Pipeline.}
+\[
+  \underbrace{Q}_{\text{mesures}}
+  \;\xrightarrow{\;\text{NLP ou MDS}\;}
+  \underbrace{\hat{\mathbf{x}}}_{\text{positions}}
+  \;\xrightarrow{\;\Eryd,\,\mathrm{RMSE}\;}
+  \underbrace{\text{évaluation}}_{\text{benchmark}}.
+\]
+
+%\appendix
+%\input{tables/exp1_appendix_summary}
+%\input{tables/exp1_appendix_instances}
+%\input{tables/exp2_appendix_summary}
+%\input{tables/exp2_appendix_instances}
+%\input{tables/exp3_appendix}
+
+
+\begin{thebibliography}{99}
+
+\bibitem{bernien2017}
+H.~Bernien \emph{et al.},
+Probing many-body dynamics on a 51-atom quantum simulator,
+Nature \textbf{551} (2017), 579--584.
+
+\bibitem{borg2005}
+I.~Borg and P.~J.~F.~Groenen,
+\emph{Modern Multidimensional Scaling: Theory and Applications},
+Springer, 2005.
+
+\bibitem{young1938}
+G.~Young and A.~S.~Householder,
+Discussion of a set of points in terms of their mutual distances,
+Psychometrika \textbf{3} (1938), 19--22.
+
+\bibitem{henry2024}
+L.~Henry \emph{et al.},
+Quantum computing with neutral atoms: architecture and benchmarks,
+\href{https://arxiv.org/abs/2401.00000}{arXiv preprint}, 2024.
+
+\bibitem{schoenberg1935}
+I.~J.~Schoenberg,
+Remarks to Maurice Fréchet's article ``Sur la définition axiomatique
+d'une classe d'espaces distanciés vectoriellement applicable sur l'espace
+de Hilbert'',
+Annals of Mathematics \textbf{36} (1935), 724--732.
+
+\bibitem{bernstein1929}
+S.~Bernstein,
+Sur les fonctions complètement monotones,
+Acta Mathematica \textbf{52} (1929), 1--66.
+
+\end{thebibliography}
+
+\end{document}

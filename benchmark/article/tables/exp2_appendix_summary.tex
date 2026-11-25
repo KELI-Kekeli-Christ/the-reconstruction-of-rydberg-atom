@@ -1,0 +1,501 @@
+% Auto-generated — Exp. 2 full summary tables (Q exacte)
+\section{Résultats détaillés --- Expérience~2 ($Q$ exacte synthétique)}
+\label{app:exp2}
+
+Positions $\mathbf{x}^{\mathrm{ref}}$ tirées sans collision, $Q_{ij}=c_6/\|\mathbf{x}^{\mathrm{ref}}_i-\mathbf{x}^{\mathrm{ref}}_j\|^6$ recalculée exactement ; moyennes sur 10 instances. Stratégies : MDS (exact), sng.\ (single), ms.\ (multistart).
+
+\subsection{$n=4$, Fixe ($L{=}10$)}
+{\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.7cm}crrc@{}}
+  \toprule
+  Formulation & Strat. & $\mathcal{E}_{\mathrm{Ryd}}$ & RMSE & Temps \\
+  \midrule
+  MDS exact & MDS & $\mathbf{2.07\times10^{-30}}$ & $3\times10^{-15}$ & 1\,ms \\
+  MDS exact & MDS & $\mathbf{2.07\times10^{-30}}$ & $3\times10^{-15}$ & 1\,ms \\
+  Standard & sng. & $7.39\times10^{-8}$ & $1.16$ & 0.77\,s \\
+  Standard & sng. & $7.39\times10^{-8}$ & $1.16$ & 0.77\,s \\
+  Standard & ms. & $4.13\times10^{-9}$ & $0.651$ & 0.12\,s \\
+  Standard & ms. & $4.13\times10^{-9}$ & $0.651$ & 0.12\,s \\
+  Taylor & sng. & $1\times10^{-6}$ & $0.262$ & 0.07\,s \\
+  Taylor & sng. & $1\times10^{-6}$ & $0.262$ & 0.07\,s \\
+  Taylor & ms. & $5\times10^{-16}$ & $6\times10^{-3}$ & 0.04\,s \\
+  Taylor & ms. & $5\times10^{-16}$ & $6\times10^{-3}$ & 0.04\,s \\
+  Taylor$^2$ & sng. & $5\times10^{-4}$ & $0.415$ & 0.09\,s \\
+  Taylor$^2$ & sng. & $5\times10^{-4}$ & $0.415$ & 0.09\,s \\
+  Taylor$^2$ & ms. & $3.22\times10^{-7}$ & $0.0409$ & 0.06\,s \\
+  Taylor$^2$ & ms. & $3.22\times10^{-7}$ & $0.0409$ & 0.06\,s \\
+  Simple$^2$ & sng. & $9.28\times10^{-26}$ & $2.12\times10^{-13}$ & 0.05\,s \\
+  Simple$^2$ & sng. & $9.28\times10^{-26}$ & $2.12\times10^{-13}$ & 0.05\,s \\
+  Simple$^2$ & ms. & $9.28\times10^{-26}$ & $2.12\times10^{-13}$ & 10\,ms \\
+  Simple$^2$ & ms. & $9.28\times10^{-26}$ & $2.12\times10^{-13}$ & 10\,ms \\
+  Simple & sng. & $2.81\times10^{-2}$ & $0.0322$ & 0.04\,s \\
+  Simple & sng. & $2.81\times10^{-2}$ & $0.0322$ & 0.04\,s \\
+  Simple & ms. & $2.48\times10^{-24}$ & $2.35\times10^{-13}$ & 0.01\,s \\
+  Simple & ms. & $2.48\times10^{-24}$ & $2.35\times10^{-13}$ & 0.01\,s \\
+  \bottomrule
+\end{tabular}
+}
+
+\subsection{$n=4$, Adaptatif ($L{=}100\sqrt{n}$)}
+{\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.7cm}crrc@{}}
+  \toprule
+  Formulation & Strat. & $\mathcal{E}_{\mathrm{Ryd}}$ & RMSE & Temps \\
+  \midrule
+  MDS exact & MDS & $\mathbf{2.59\times10^{-41}}$ & $8.68\times10^{-14}$ & 0\,ms \\
+  MDS exact & MDS & $\mathbf{2.59\times10^{-41}}$ & $8.68\times10^{-14}$ & 0\,ms \\
+  Standard & sng. & $1.70\times10^{-12}$ & $69.9$ & 7\,ms \\
+  Standard & sng. & $1.70\times10^{-12}$ & $69.9$ & 7\,ms \\
+  Standard & ms. & $1.70\times10^{-12}$ & $69.8$ & 9\,ms \\
+  Standard & ms. & $1.70\times10^{-12}$ & $69.8$ & 9\,ms \\
+  Taylor & sng. & $7.89\times10^{-17}$ & $70.2$ & 0.01\,s \\
+  Taylor & sng. & $7.89\times10^{-17}$ & $70.2$ & 0.01\,s \\
+  Taylor & ms. & $7.89\times10^{-17}$ & $70.2$ & 0.01\,s \\
+  Taylor & ms. & $7.89\times10^{-17}$ & $70.2$ & 0.01\,s \\
+  Taylor$^2$ & sng. & $5\times10^{-17}$ & $66.4$ & 0.02\,s \\
+  Taylor$^2$ & sng. & $5\times10^{-17}$ & $66.4$ & 0.02\,s \\
+  Taylor$^2$ & ms. & $5\times10^{-17}$ & $66.4$ & 0.02\,s \\
+  Taylor$^2$ & ms. & $5\times10^{-17}$ & $66.4$ & 0.02\,s \\
+  Simple$^2$ & sng. & $3.24\times10^{-37}$ & $6.56\times10^{-14}$ & 0.01\,s \\
+  Simple$^2$ & sng. & $3.24\times10^{-37}$ & $6.56\times10^{-14}$ & 0.01\,s \\
+  Simple$^2$ & ms. & $3.24\times10^{-37}$ & $6.56\times10^{-14}$ & 0.01\,s \\
+  Simple$^2$ & ms. & $3.24\times10^{-37}$ & $6.56\times10^{-14}$ & 0.01\,s \\
+  Simple & sng. & $6.12\times10^{-39}$ & $5.09\times10^{-12}$ & 0.01\,s \\
+  Simple & sng. & $6.12\times10^{-39}$ & $5.09\times10^{-12}$ & 0.01\,s \\
+  Simple & ms. & $6.12\times10^{-39}$ & $5.09\times10^{-12}$ & 0.01\,s \\
+  Simple & ms. & $6.12\times10^{-39}$ & $5.09\times10^{-12}$ & 0.01\,s \\
+  \bottomrule
+\end{tabular}
+}
+
+\subsection{$n=4$, Optimal ($L{\approx}r_{\min}$)}
+{\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.7cm}crrc@{}}
+  \toprule
+  Formulation & Strat. & $\mathcal{E}_{\mathrm{Ryd}}$ & RMSE & Temps \\
+  \midrule
+  MDS exact & MDS & $\mathbf{1.74\times10^{-23}}$ & $2.70\times10^{-15}$ & 0\,ms \\
+  MDS exact & MDS & $\mathbf{1.74\times10^{-23}}$ & $2.70\times10^{-15}$ & 0\,ms \\
+  Standard & sng. & $1.65\times10^{-4}$ & $0.743$ & 0.65\,s \\
+  Standard & sng. & $1.65\times10^{-4}$ & $0.743$ & 0.65\,s \\
+  Standard & ms. & $1.65\times10^{-4}$ & $0.529$ & 0.73\,s \\
+  Standard & ms. & $1.65\times10^{-4}$ & $0.529$ & 0.73\,s \\
+  Taylor & sng. & $5.13\times10^{-6}$ & $0.812$ & 0.03\,s \\
+  Taylor & sng. & $5.13\times10^{-6}$ & $0.812$ & 0.03\,s \\
+  Taylor & ms. & $5.10\times10^{-6}$ & $0.217$ & 0.12\,s \\
+  Taylor & ms. & $5.10\times10^{-6}$ & $0.217$ & 0.12\,s \\
+  Taylor$^2$ & sng. & $5.21\times10^{-6}$ & $0.311$ & 0.02\,s \\
+  Taylor$^2$ & sng. & $5.21\times10^{-6}$ & $0.311$ & 0.02\,s \\
+  Taylor$^2$ & ms. & $5.12\times10^{-6}$ & $0.133$ & 0.14\,s \\
+  Taylor$^2$ & ms. & $5.12\times10^{-6}$ & $0.133$ & 0.14\,s \\
+  Simple$^2$ & sng. & $1\times10^{-17}$ & $1.08\times10^{-11}$ & 9\,ms \\
+  Simple$^2$ & sng. & $1\times10^{-17}$ & $1.08\times10^{-11}$ & 9\,ms \\
+  Simple$^2$ & ms. & $1\times10^{-17}$ & $1.08\times10^{-11}$ & 9\,ms \\
+  Simple$^2$ & ms. & $1\times10^{-17}$ & $1.08\times10^{-11}$ & 9\,ms \\
+  Simple & sng. & $2.09\times10^{3}$ & $5.22\times10^{-3}$ & 0.01\,s \\
+  Simple & sng. & $2.09\times10^{3}$ & $5.22\times10^{-3}$ & 0.01\,s \\
+  Simple & ms. & $1.26\times10^{-18}$ & $8.42\times10^{-14}$ & 0.01\,s \\
+  Simple & ms. & $1.26\times10^{-18}$ & $8.42\times10^{-14}$ & 0.01\,s \\
+  \bottomrule
+\end{tabular}
+}
+
+\subsection{$n=10$, Fixe ($L{=}10$)}
+{\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.7cm}crrc@{}}
+  \toprule
+  Formulation & Strat. & $\mathcal{E}_{\mathrm{Ryd}}$ & RMSE & Temps \\
+  \midrule
+  MDS exact & MDS & $\mathbf{8.31\times10^{-15}}$ & $3.80\times10^{-15}$ & 0\,ms \\
+  MDS exact & MDS & $\mathbf{8.31\times10^{-15}}$ & $3.80\times10^{-15}$ & 0\,ms \\
+  Standard & sng. & $6.74\times10^{11}$ & $3.57$ & 1.0\,s \\
+  Standard & sng. & $6.74\times10^{11}$ & $3.57$ & 1.0\,s \\
+  Standard & ms. & $3.37\times10^{11}$ & $2.77$ & 2.8\,s \\
+  Standard & ms. & $3.37\times10^{11}$ & $2.77$ & 2.8\,s \\
+  Taylor & sng. & $3.37\times10^{11}$ & $2$ & 0.14\,s \\
+  Taylor & sng. & $3.37\times10^{11}$ & $2$ & 0.14\,s \\
+  Taylor & ms. & $3.37\times10^{11}$ & $1.5$ & 3.8\,s \\
+  Taylor & ms. & $3.37\times10^{11}$ & $1.5$ & 3.8\,s \\
+  Taylor$^2$ & sng. & $3.37\times10^{11}$ & $1.52$ & 0.90\,s \\
+  Taylor$^2$ & sng. & $3.37\times10^{11}$ & $1.52$ & 0.90\,s \\
+  Taylor$^2$ & ms. & $3.37\times10^{11}$ & $1.39$ & 7.9\,s \\
+  Taylor$^2$ & ms. & $3.37\times10^{11}$ & $1.39$ & 7.9\,s \\
+  Simple$^2$ & sng. & $3.37\times10^{11}$ & $3.53\times10^{-3}$ & 0.04\,s \\
+  Simple$^2$ & sng. & $3.37\times10^{11}$ & $3.53\times10^{-3}$ & 0.04\,s \\
+  Simple$^2$ & ms. & $3.37\times10^{11}$ & $3.53\times10^{-3}$ & 0.05\,s \\
+  Simple$^2$ & ms. & $3.37\times10^{11}$ & $3.53\times10^{-3}$ & 0.05\,s \\
+  Simple & sng. & $3.37\times10^{11}$ & $0.263$ & 0.04\,s \\
+  Simple & sng. & $3.37\times10^{11}$ & $0.263$ & 0.04\,s \\
+  Simple & ms. & $3.37\times10^{11}$ & $0.129$ & 0.06\,s \\
+  Simple & ms. & $3.37\times10^{11}$ & $0.129$ & 0.06\,s \\
+  \bottomrule
+\end{tabular}
+}
+
+\subsection{$n=10$, Adaptatif ($L{=}100\sqrt{n}$)}
+{\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.7cm}crrc@{}}
+  \toprule
+  Formulation & Strat. & $\mathcal{E}_{\mathrm{Ryd}}$ & RMSE & Temps \\
+  \midrule
+  MDS exact & MDS & $\mathbf{2.20\times10^{-36}}$ & $1.73\times10^{-13}$ & 0\,ms \\
+  MDS exact & MDS & $\mathbf{2.20\times10^{-36}}$ & $1.73\times10^{-13}$ & 0\,ms \\
+  Standard & sng. & $6\times10^{-9}$ & $1.16\times10^{2}$ & 0.02\,s \\
+  Standard & sng. & $6\times10^{-9}$ & $1.16\times10^{2}$ & 0.02\,s \\
+  Standard & ms. & $6\times10^{-9}$ & $1.23\times10^{2}$ & 0.04\,s \\
+  Standard & ms. & $6\times10^{-9}$ & $1.23\times10^{2}$ & 0.04\,s \\
+  Taylor & sng. & $2\times10^{-13}$ & $1.23\times10^{2}$ & 0.05\,s \\
+  Taylor & sng. & $2\times10^{-13}$ & $1.23\times10^{2}$ & 0.05\,s \\
+  Taylor & ms. & $7.92\times10^{-14}$ & $1.26\times10^{2}$ & 0.07\,s \\
+  Taylor & ms. & $7.92\times10^{-14}$ & $1.26\times10^{2}$ & 0.07\,s \\
+  Taylor$^2$ & sng. & $2.72\times10^{-13}$ & $1.24\times10^{2}$ & 0.07\,s \\
+  Taylor$^2$ & sng. & $2.72\times10^{-13}$ & $1.24\times10^{2}$ & 0.07\,s \\
+  Taylor$^2$ & ms. & $3.10\times10^{-14}$ & $1.23\times10^{2}$ & 0.09\,s \\
+  Taylor$^2$ & ms. & $3.10\times10^{-14}$ & $1.23\times10^{2}$ & 0.09\,s \\
+  Simple$^2$ & sng. & $1.35\times10^{-33}$ & $1.36\times10^{-13}$ & 0.06\,s \\
+  Simple$^2$ & sng. & $1.35\times10^{-33}$ & $1.36\times10^{-13}$ & 0.06\,s \\
+  Simple$^2$ & ms. & $1.35\times10^{-33}$ & $1.36\times10^{-13}$ & 0.06\,s \\
+  Simple$^2$ & ms. & $1.35\times10^{-33}$ & $1.36\times10^{-13}$ & 0.06\,s \\
+  Simple & sng. & $7.20\times10^{-18}$ & $4.94$ & 0.07\,s \\
+  Simple & sng. & $7.20\times10^{-18}$ & $4.94$ & 0.07\,s \\
+  Simple & ms. & $7.20\times10^{-18}$ & $4.94$ & 0.07\,s \\
+  Simple & ms. & $7.20\times10^{-18}$ & $4.94$ & 0.07\,s \\
+  \bottomrule
+\end{tabular}
+}
+
+\subsection{$n=10$, Optimal ($L{\approx}r_{\min}$)}
+{\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.7cm}crrc@{}}
+  \toprule
+  Formulation & Strat. & $\mathcal{E}_{\mathrm{Ryd}}$ & RMSE & Temps \\
+  \midrule
+  MDS exact & MDS & $\mathbf{2.10\times10^{-20}}$ & $3.77\times10^{-15}$ & 0\,ms \\
+  MDS exact & MDS & $\mathbf{2.10\times10^{-20}}$ & $3.77\times10^{-15}$ & 0\,ms \\
+  Standard & sng. & $2.37\times10^{8}$ & $3.08$ & 0.69\,s \\
+  Standard & sng. & $2.37\times10^{8}$ & $3.08$ & 0.69\,s \\
+  Standard & ms. & $1.18\times10^{8}$ & $2.2$ & 1.9\,s \\
+  Standard & ms. & $1.18\times10^{8}$ & $2.2$ & 1.9\,s \\
+  Taylor & sng. & $1.31\times10^{8}$ & $1.14$ & 2.0\,s \\
+  Taylor & sng. & $1.31\times10^{8}$ & $1.14$ & 2.0\,s \\
+  Taylor & ms. & $1.18\times10^{8}$ & $0.971$ & 5.2\,s \\
+  Taylor & ms. & $1.18\times10^{8}$ & $0.971$ & 5.2\,s \\
+  Taylor$^2$ & sng. & $2.60\times10^{8}$ & $1.16$ & 1.1\,s \\
+  Taylor$^2$ & sng. & $2.60\times10^{8}$ & $1.16$ & 1.1\,s \\
+  Taylor$^2$ & ms. & $1.18\times10^{8}$ & $0.298$ & 4.9\,s \\
+  Taylor$^2$ & ms. & $1.18\times10^{8}$ & $0.298$ & 4.9\,s \\
+  Simple$^2$ & sng. & $1.18\times10^{8}$ & $1.10\times10^{-3}$ & 0.03\,s \\
+  Simple$^2$ & sng. & $1.18\times10^{8}$ & $1.10\times10^{-3}$ & 0.03\,s \\
+  Simple$^2$ & ms. & $1.18\times10^{8}$ & $1.10\times10^{-3}$ & 0.04\,s \\
+  Simple$^2$ & ms. & $1.18\times10^{8}$ & $1.10\times10^{-3}$ & 0.04\,s \\
+  Simple & sng. & $1.18\times10^{8}$ & $0.0798$ & 0.04\,s \\
+  Simple & sng. & $1.18\times10^{8}$ & $0.0798$ & 0.04\,s \\
+  Simple & ms. & $1.18\times10^{8}$ & $1\times10^{-3}$ & 0.06\,s \\
+  Simple & ms. & $1.18\times10^{8}$ & $1\times10^{-3}$ & 0.06\,s \\
+  \bottomrule
+\end{tabular}
+}
+
+\subsection{$n=20$, Fixe ($L{=}10$)}
+{\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.7cm}crrc@{}}
+  \toprule
+  Formulation & Strat. & $\mathcal{E}_{\mathrm{Ryd}}$ & RMSE & Temps \\
+  \midrule
+  MDS exact & MDS & $\mathbf{6.07\times10^{-15}}$ & $3.77\times10^{-15}$ & 0\,ms \\
+  MDS exact & MDS & $\mathbf{6.07\times10^{-15}}$ & $3.77\times10^{-15}$ & 0\,ms \\
+  Standard & sng. & $1.25\times10^{13}$ & $4.16$ & 0.64\,s \\
+  Standard & sng. & $1.25\times10^{13}$ & $4.16$ & 0.64\,s \\
+  Standard & ms. & $1.13\times10^{13}$ & $4.13$ & 2.9\,s \\
+  Standard & ms. & $1.13\times10^{13}$ & $4.13$ & 2.9\,s \\
+  Taylor & sng. & $1.55\times10^{6}$ & $1.83$ & 3.8\,s \\
+  Taylor & sng. & $1.55\times10^{6}$ & $1.83$ & 3.8\,s \\
+  Taylor & ms. & $1.13\times10^{13}$ & $1.65$ & 16.0\,s \\
+  Taylor & ms. & $1.13\times10^{13}$ & $1.65$ & 16.0\,s \\
+  Taylor$^2$ & sng. & $1.13\times10^{13}$ & $1.35$ & 7.0\,s \\
+  Taylor$^2$ & sng. & $1.13\times10^{13}$ & $1.35$ & 7.0\,s \\
+  Taylor$^2$ & ms. & $1.13\times10^{13}$ & $1.14$ & 22.4\,s \\
+  Taylor$^2$ & ms. & $1.13\times10^{13}$ & $1.14$ & 22.4\,s \\
+  Simple$^2$ & sng. & $1.13\times10^{13}$ & $7\times10^{-3}$ & 0.19\,s \\
+  Simple$^2$ & sng. & $1.13\times10^{13}$ & $7\times10^{-3}$ & 0.19\,s \\
+  Simple$^2$ & ms. & $1.13\times10^{13}$ & $3.74\times10^{-3}$ & 0.27\,s \\
+  Simple$^2$ & ms. & $1.13\times10^{13}$ & $3.74\times10^{-3}$ & 0.27\,s \\
+  Simple & sng. & $1.13\times10^{13}$ & $0.156$ & 0.20\,s \\
+  Simple & sng. & $1.13\times10^{13}$ & $0.156$ & 0.20\,s \\
+  Simple & ms. & $1.13\times10^{13}$ & $3.64\times10^{-3}$ & 0.29\,s \\
+  Simple & ms. & $1.13\times10^{13}$ & $3.64\times10^{-3}$ & 0.29\,s \\
+  \bottomrule
+\end{tabular}
+}
+
+\subsection{$n=20$, Adaptatif ($L{=}100\sqrt{n}$)}
+{\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.7cm}crrc@{}}
+  \toprule
+  Formulation & Strat. & $\mathcal{E}_{\mathrm{Ryd}}$ & RMSE & Temps \\
+  \midrule
+  MDS exact & MDS & $\mathbf{1.71\times10^{-41}}$ & $2.64\times10^{-13}$ & 0\,ms \\
+  MDS exact & MDS & $\mathbf{1.71\times10^{-41}}$ & $2.64\times10^{-13}$ & 0\,ms \\
+  Standard & sng. & $1.67\times10^{-13}$ & $1.81\times10^{2}$ & 0.07\,s \\
+  Standard & sng. & $1.67\times10^{-13}$ & $1.81\times10^{2}$ & 0.07\,s \\
+  Standard & ms. & $1.67\times10^{-13}$ & $1.76\times10^{2}$ & 0.08\,s \\
+  Standard & ms. & $1.67\times10^{-13}$ & $1.76\times10^{2}$ & 0.08\,s \\
+  Taylor & sng. & $1.57\times10^{-13}$ & $1.77\times10^{2}$ & 0.11\,s \\
+  Taylor & sng. & $1.57\times10^{-13}$ & $1.77\times10^{2}$ & 0.11\,s \\
+  Taylor & ms. & $1.57\times10^{-13}$ & $1.77\times10^{2}$ & 0.11\,s \\
+  Taylor & ms. & $1.57\times10^{-13}$ & $1.77\times10^{2}$ & 0.11\,s \\
+  Taylor$^2$ & sng. & $1\times10^{-13}$ & $1.93\times10^{2}$ & 11.6\,s \\
+  Taylor$^2$ & sng. & $1\times10^{-13}$ & $1.93\times10^{2}$ & 11.6\,s \\
+  Taylor$^2$ & ms. & $1\times10^{-13}$ & $1.93\times10^{2}$ & 11.6\,s \\
+  Taylor$^2$ & ms. & $1\times10^{-13}$ & $1.93\times10^{2}$ & 11.6\,s \\
+  Simple$^2$ & sng. & $5.80\times10^{-19}$ & $0.0525$ & 0.47\,s \\
+  Simple$^2$ & sng. & $5.80\times10^{-19}$ & $0.0525$ & 0.47\,s \\
+  Simple$^2$ & ms. & $5.80\times10^{-19}$ & $0.0525$ & 0.47\,s \\
+  Simple$^2$ & ms. & $5.80\times10^{-19}$ & $0.0525$ & 0.47\,s \\
+  Simple & sng. & $2\times10^{-12}$ & $18.7$ & 0.39\,s \\
+  Simple & sng. & $2\times10^{-12}$ & $18.7$ & 0.39\,s \\
+  Simple & ms. & $1.26\times10^{-14}$ & $18.6$ & 0.44\,s \\
+  Simple & ms. & $1.26\times10^{-14}$ & $18.6$ & 0.44\,s \\
+  \bottomrule
+\end{tabular}
+}
+
+\subsection{$n=20$, Optimal ($L{\approx}r_{\min}$)}
+{\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.7cm}crrc@{}}
+  \toprule
+  Formulation & Strat. & $\mathcal{E}_{\mathrm{Ryd}}$ & RMSE & Temps \\
+  \midrule
+  MDS exact & MDS & $\mathbf{2.68\times10^{-20}}$ & $3.53\times10^{-15}$ & 0\,ms \\
+  MDS exact & MDS & $\mathbf{2.68\times10^{-20}}$ & $3.53\times10^{-15}$ & 0\,ms \\
+  Standard & sng. & $5.24\times10^{7}$ & $5.33$ & 0.58\,s \\
+  Standard & sng. & $5.24\times10^{7}$ & $5.33$ & 0.58\,s \\
+  Standard & ms. & $9.28\times10^{6}$ & $4.21$ & 2.7\,s \\
+  Standard & ms. & $9.28\times10^{6}$ & $4.21$ & 2.7\,s \\
+  Taylor & sng. & $9.58\times10^{6}$ & $2.2$ & 7.1\,s \\
+  Taylor & sng. & $9.58\times10^{6}$ & $2.2$ & 7.1\,s \\
+  Taylor & ms. & $9.28\times10^{6}$ & $2.16$ & 14.3\,s \\
+  Taylor & ms. & $9.28\times10^{6}$ & $2.16$ & 14.3\,s \\
+  Taylor$^2$ & sng. & $2.88\times10^{7}$ & $1.82$ & 12.0\,s \\
+  Taylor$^2$ & sng. & $2.88\times10^{7}$ & $1.82$ & 12.0\,s \\
+  Taylor$^2$ & ms. & $9.28\times10^{6}$ & $1.16$ & 30.9\,s \\
+  Taylor$^2$ & ms. & $9.28\times10^{6}$ & $1.16$ & 30.9\,s \\
+  Simple$^2$ & sng. & $9.28\times10^{6}$ & $2.73\times10^{-4}$ & 0.16\,s \\
+  Simple$^2$ & sng. & $9.28\times10^{6}$ & $2.73\times10^{-4}$ & 0.16\,s \\
+  Simple$^2$ & ms. & $9.28\times10^{6}$ & $2.73\times10^{-4}$ & 0.29\,s \\
+  Simple$^2$ & ms. & $9.28\times10^{6}$ & $2.73\times10^{-4}$ & 0.29\,s \\
+  Simple & sng. & $9.28\times10^{6}$ & $2.73\times10^{-4}$ & 0.19\,s \\
+  Simple & sng. & $9.28\times10^{6}$ & $2.73\times10^{-4}$ & 0.19\,s \\
+  Simple & ms. & $9.28\times10^{6}$ & $2.73\times10^{-4}$ & 0.30\,s \\
+  Simple & ms. & $9.28\times10^{6}$ & $2.73\times10^{-4}$ & 0.30\,s \\
+  \bottomrule
+\end{tabular}
+}
+
+\subsection{$n=30$, Fixe ($L{=}10$)}
+{\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.7cm}crrc@{}}
+  \toprule
+  Formulation & Strat. & $\mathcal{E}_{\mathrm{Ryd}}$ & RMSE & Temps \\
+  \midrule
+  MDS exact & MDS & $\mathbf{6.74\times10^{-12}}$ & $3\times10^{-15}$ & 1\,ms \\
+  MDS exact & MDS & $\mathbf{6.74\times10^{-12}}$ & $3\times10^{-15}$ & 1\,ms \\
+  Standard & sng. & $2.81\times10^{14}$ & $4.2$ & 4.2\,s \\
+  Standard & sng. & $2.81\times10^{14}$ & $4.2$ & 4.2\,s \\
+  Standard & ms. & $2\times10^{14}$ & $4.31$ & 8.7\,s \\
+  Standard & ms. & $2\times10^{14}$ & $4.31$ & 8.7\,s \\
+  Taylor & sng. & $2.19\times10^{14}$ & $2.25$ & 4.5\,s \\
+  Taylor & sng. & $2.19\times10^{14}$ & $2.25$ & 4.5\,s \\
+  Taylor & ms. & $2\times10^{14}$ & $1.94$ & 10.6\,s \\
+  Taylor & ms. & $2\times10^{14}$ & $1.94$ & 10.6\,s \\
+  Taylor$^2$ & sng. & $2.19\times10^{14}$ & $1.81$ & 5.1\,s \\
+  Taylor$^2$ & sng. & $2.19\times10^{14}$ & $1.81$ & 5.1\,s \\
+  Taylor$^2$ & ms. & $2\times10^{14}$ & $1.36$ & 14.0\,s \\
+  Taylor$^2$ & ms. & $2\times10^{14}$ & $1.36$ & 14.0\,s \\
+  Simple$^2$ & sng. & $2\times10^{14}$ & $6.45\times10^{-3}$ & 0.62\,s \\
+  Simple$^2$ & sng. & $2\times10^{14}$ & $6.45\times10^{-3}$ & 0.62\,s \\
+  Simple$^2$ & ms. & $2\times10^{14}$ & $6.45\times10^{-3}$ & 1.0\,s \\
+  Simple$^2$ & ms. & $2\times10^{14}$ & $6.45\times10^{-3}$ & 1.0\,s \\
+  Simple & sng. & $2\times10^{14}$ & $7.54\times10^{-3}$ & 0.55\,s \\
+  Simple & sng. & $2\times10^{14}$ & $7.54\times10^{-3}$ & 0.55\,s \\
+  Simple & ms. & $2\times10^{14}$ & $7.54\times10^{-3}$ & 1.1\,s \\
+  Simple & ms. & $2\times10^{14}$ & $7.54\times10^{-3}$ & 1.1\,s \\
+  \bottomrule
+\end{tabular}
+}
+
+\subsection{$n=30$, Adaptatif ($L{=}100\sqrt{n}$)}
+{\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.7cm}crrc@{}}
+  \toprule
+  Formulation & Strat. & $\mathcal{E}_{\mathrm{Ryd}}$ & RMSE & Temps \\
+  \midrule
+  MDS exact & MDS & $4.83\times10^{-33}$ & $2.46\times10^{-13}$ & 1\,ms \\
+  MDS exact & MDS & $4.83\times10^{-33}$ & $2.46\times10^{-13}$ & 1\,ms \\
+  Standard & sng. & $4.34\times10^{-8}$ & $2\times10^{2}$ & 0.14\,s \\
+  Standard & sng. & $4.34\times10^{-8}$ & $2\times10^{2}$ & 0.14\,s \\
+  Standard & ms. & $4.34\times10^{-8}$ & $2.15\times10^{2}$ & 0.22\,s \\
+  Standard & ms. & $4.34\times10^{-8}$ & $2.15\times10^{2}$ & 0.22\,s \\
+  Taylor & sng. & $1.36\times10^{-10}$ & $2.15\times10^{2}$ & 0.58\,s \\
+  Taylor & sng. & $1.36\times10^{-10}$ & $2.15\times10^{2}$ & 0.58\,s \\
+  Taylor & ms. & $4.11\times10^{-12}$ & $2.28\times10^{2}$ & 0.80\,s \\
+  Taylor & ms. & $4.11\times10^{-12}$ & $2.28\times10^{2}$ & 0.80\,s \\
+  Taylor$^2$ & sng. & $2.46\times10^{-12}$ & $2.36\times10^{2}$ & 47.2\,s \\
+  Taylor$^2$ & sng. & $2.46\times10^{-12}$ & $2.36\times10^{2}$ & 47.2\,s \\
+  Taylor$^2$ & ms. & $1.51\times10^{-13}$ & $2.37\times10^{2}$ & 58.5\,s \\
+  Taylor$^2$ & ms. & $1.51\times10^{-13}$ & $2.37\times10^{2}$ & 58.5\,s \\
+  Simple$^2$ & sng. & $\mathbf{4.35\times10^{-33}}$ & $4\times10^{-11}$ & 2.0\,s \\
+  Simple$^2$ & sng. & $\mathbf{4.35\times10^{-33}}$ & $4\times10^{-11}$ & 2.0\,s \\
+  Simple$^2$ & ms. & $4.35\times10^{-33}$ & $4\times10^{-11}$ & 1.9\,s \\
+  Simple$^2$ & ms. & $4.35\times10^{-33}$ & $4\times10^{-11}$ & 1.9\,s \\
+  Simple & sng. & $1.89\times10^{-16}$ & $5.88$ & 1.3\,s \\
+  Simple & sng. & $1.89\times10^{-16}$ & $5.88$ & 1.3\,s \\
+  Simple & ms. & $1.89\times10^{-16}$ & $5.88$ & 1.3\,s \\
+  Simple & ms. & $1.89\times10^{-16}$ & $5.88$ & 1.3\,s \\
+  \bottomrule
+\end{tabular}
+}
+
+\subsection{$n=30$, Optimal ($L{\approx}r_{\min}$)}
+{\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.7cm}crrc@{}}
+  \toprule
+  Formulation & Strat. & $\mathcal{E}_{\mathrm{Ryd}}$ & RMSE & Temps \\
+  \midrule
+  MDS exact & MDS & $\mathbf{8\times10^{-11}}$ & $3.74\times10^{-15}$ & 2\,ms \\
+  MDS exact & MDS & $\mathbf{8\times10^{-11}}$ & $3.74\times10^{-15}$ & 2\,ms \\
+  Standard & sng. & $7.46\times10^{9}$ & $5.41$ & 5.2\,s \\
+  Standard & sng. & $7.46\times10^{9}$ & $5.41$ & 5.2\,s \\
+  Standard & ms. & $2.85\times10^{11}$ & $5.31$ & 7.3\,s \\
+  Standard & ms. & $2.85\times10^{11}$ & $5.31$ & 7.3\,s \\
+  Taylor & sng. & $2.92\times10^{15}$ & $2.6$ & 5.5\,s \\
+  Taylor & sng. & $2.92\times10^{15}$ & $2.6$ & 5.5\,s \\
+  Taylor & ms. & $2.92\times10^{15}$ & $2.18$ & 25.0\,s \\
+  Taylor & ms. & $2.92\times10^{15}$ & $2.18$ & 25.0\,s \\
+  Taylor$^2$ & sng. & $3.24\times10^{15}$ & $1.69$ & 8.5\,s \\
+  Taylor$^2$ & sng. & $3.24\times10^{15}$ & $1.69$ & 8.5\,s \\
+  Taylor$^2$ & ms. & $2.92\times10^{15}$ & $1.59$ & 23.8\,s \\
+  Taylor$^2$ & ms. & $2.92\times10^{15}$ & $1.59$ & 23.8\,s \\
+  Simple$^2$ & sng. & $2.92\times10^{15}$ & $7.12\times10^{-3}$ & 0.54\,s \\
+  Simple$^2$ & sng. & $2.92\times10^{15}$ & $7.12\times10^{-3}$ & 0.54\,s \\
+  Simple$^2$ & ms. & $2.92\times10^{15}$ & $7\times10^{-3}$ & 0.82\,s \\
+  Simple$^2$ & ms. & $2.92\times10^{15}$ & $7\times10^{-3}$ & 0.82\,s \\
+  Simple & sng. & $2.92\times10^{15}$ & $0.113$ & 0.63\,s \\
+  Simple & sng. & $2.92\times10^{15}$ & $0.113$ & 0.63\,s \\
+  Simple & ms. & $2.92\times10^{15}$ & $7\times10^{-3}$ & 0.96\,s \\
+  Simple & ms. & $2.92\times10^{15}$ & $7\times10^{-3}$ & 0.96\,s \\
+  \bottomrule
+\end{tabular}
+}
+
+\subsection{$n=50$, Fixe ($L{=}10$)}
+{\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.7cm}crrc@{}}
+  \toprule
+  Formulation & Strat. & $\mathcal{E}_{\mathrm{Ryd}}$ & RMSE & Temps \\
+  \midrule
+  MDS exact & MDS & $\mathbf{1.94\times10^{-14}}$ & $2.77\times10^{-15}$ & 1\,ms \\
+  MDS exact & MDS & $\mathbf{1.94\times10^{-14}}$ & $2.77\times10^{-15}$ & 1\,ms \\
+  Standard & sng. & $1.89\times10^{9}$ & $3.89$ & 39.3\,s \\
+  Standard & sng. & $1.89\times10^{9}$ & $3.89$ & 39.3\,s \\
+  Standard & ms. & $2.20\times10^{12}$ & $3.96$ & 1.3\,min \\
+  Standard & ms. & $2.20\times10^{12}$ & $3.96$ & 1.3\,min \\
+  Taylor & sng. & $3.86\times10^{12}$ & $2.19$ & 45.6\,s \\
+  Taylor & sng. & $3.86\times10^{12}$ & $2.19$ & 45.6\,s \\
+  Taylor & ms. & $3.48\times10^{12}$ & $2.31$ & 1.4\,min \\
+  Taylor & ms. & $3.48\times10^{12}$ & $2.31$ & 1.4\,min \\
+  Taylor$^2$ & sng. & $3.49\times10^{12}$ & $1.99$ & 59.1\,s \\
+  Taylor$^2$ & sng. & $3.49\times10^{12}$ & $1.99$ & 59.1\,s \\
+  Taylor$^2$ & ms. & $3.49\times10^{12}$ & $1.8$ & 1.9\,min \\
+  Taylor$^2$ & ms. & $3.49\times10^{12}$ & $1.8$ & 1.9\,min \\
+  Simple$^2$ & sng. & $3.48\times10^{12}$ & $8.79\times10^{-3}$ & 2.9\,s \\
+  Simple$^2$ & sng. & $3.48\times10^{12}$ & $8.79\times10^{-3}$ & 2.9\,s \\
+  Simple$^2$ & ms. & $3.48\times10^{12}$ & $8.29\times10^{-3}$ & 5.3\,s \\
+  Simple$^2$ & ms. & $3.48\times10^{12}$ & $8.29\times10^{-3}$ & 5.3\,s \\
+  Simple & sng. & $3.48\times10^{12}$ & $0.0661$ & 3.2\,s \\
+  Simple & sng. & $3.48\times10^{12}$ & $0.0661$ & 3.2\,s \\
+  Simple & ms. & $3.48\times10^{12}$ & $7.58\times10^{-3}$ & 5.9\,s \\
+  Simple & ms. & $3.48\times10^{12}$ & $7.58\times10^{-3}$ & 5.9\,s \\
+  \bottomrule
+\end{tabular}
+}
+
+\subsection{$n=50$, Adaptatif ($L{=}100\sqrt{n}$)}
+{\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.7cm}crrc@{}}
+  \toprule
+  Formulation & Strat. & $\mathcal{E}_{\mathrm{Ryd}}$ & RMSE & Temps \\
+  \midrule
+  MDS exact & MDS & $\mathbf{2\times10^{-33}}$ & $2.38\times10^{-13}$ & 1\,ms \\
+  MDS exact & MDS & $\mathbf{2\times10^{-33}}$ & $2.38\times10^{-13}$ & 1\,ms \\
+  Standard & sng. & $1.31\times10^{-8}$ & $2.64\times10^{2}$ & 0.70\,s \\
+  Standard & sng. & $1.31\times10^{-8}$ & $2.64\times10^{2}$ & 0.70\,s \\
+  Standard & ms. & $1.30\times10^{-8}$ & $2.62\times10^{2}$ & 0.93\,s \\
+  Standard & ms. & $1.30\times10^{-8}$ & $2.62\times10^{2}$ & 0.93\,s \\
+  Taylor & sng. & $3.92\times10^{-7}$ & $2.81\times10^{2}$ & 2.0\,s \\
+  Taylor & sng. & $3.92\times10^{-7}$ & $2.81\times10^{2}$ & 2.0\,s \\
+  Taylor & ms. & $8.60\times10^{-12}$ & $2.75\times10^{2}$ & 6.5\,s \\
+  Taylor & ms. & $8.60\times10^{-12}$ & $2.75\times10^{2}$ & 6.5\,s \\
+  Taylor$^2$ & sng. & $4.16\times10^{-4}$ & $3\times10^{2}$ & 13.3\,s \\
+  Taylor$^2$ & sng. & $4.16\times10^{-4}$ & $3\times10^{2}$ & 13.3\,s \\
+  Taylor$^2$ & ms. & $2.61\times10^{-10}$ & $3\times10^{2}$ & 33.2\,s \\
+  Taylor$^2$ & ms. & $2.61\times10^{-10}$ & $3\times10^{2}$ & 33.2\,s \\
+  Simple$^2$ & sng. & $1.49\times10^{-26}$ & $3.32\times10^{-11}$ & 4.8\,s \\
+  Simple$^2$ & sng. & $1.49\times10^{-26}$ & $3.32\times10^{-11}$ & 4.8\,s \\
+  Simple$^2$ & ms. & $1.49\times10^{-26}$ & $3.32\times10^{-11}$ & 4.8\,s \\
+  Simple$^2$ & ms. & $1.49\times10^{-26}$ & $3.32\times10^{-11}$ & 4.8\,s \\
+  Simple & sng. & $6.62\times10^{-32}$ & $2.19\times10^{-13}$ & 6.4\,s \\
+  Simple & sng. & $6.62\times10^{-32}$ & $2.19\times10^{-13}$ & 6.4\,s \\
+  Simple & ms. & $6.62\times10^{-32}$ & $2.19\times10^{-13}$ & 6.1\,s \\
+  Simple & ms. & $6.62\times10^{-32}$ & $2.19\times10^{-13}$ & 6.1\,s \\
+  \bottomrule
+\end{tabular}
+}
+
+\subsection{$n=50$, Optimal ($L{\approx}r_{\min}$)}
+{\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.7cm}crrc@{}}
+  \toprule
+  Formulation & Strat. & $\mathcal{E}_{\mathrm{Ryd}}$ & RMSE & Temps \\
+  \midrule
+  MDS exact & MDS & $\mathbf{1.41\times10^{-13}}$ & $3\times10^{-15}$ & 1\,ms \\
+  MDS exact & MDS & $\mathbf{1.41\times10^{-13}}$ & $3\times10^{-15}$ & 1\,ms \\
+  Standard & sng. & $5.77\times10^{11}$ & $4.96$ & 12.5\,s \\
+  Standard & sng. & $5.77\times10^{11}$ & $4.96$ & 12.5\,s \\
+  Standard & ms. & $9.65\times10^{11}$ & $4.75$ & 44.1\,s \\
+  Standard & ms. & $9.65\times10^{11}$ & $4.75$ & 44.1\,s \\
+  Taylor & sng. & $3.41\times10^{13}$ & $2.26$ & 44.8\,s \\
+  Taylor & sng. & $3.41\times10^{13}$ & $2.26$ & 44.8\,s \\
+  Taylor & ms. & $3.41\times10^{13}$ & $2.3$ & 1.5\,min \\
+  Taylor & ms. & $3.41\times10^{13}$ & $2.3$ & 1.5\,min \\
+  Taylor$^2$ & sng. & $3.41\times10^{13}$ & $1.83$ & 1.4\,min \\
+  Taylor$^2$ & sng. & $3.41\times10^{13}$ & $1.83$ & 1.4\,min \\
+  Taylor$^2$ & ms. & $3.41\times10^{13}$ & $1.49$ & 2.1\,min \\
+  Taylor$^2$ & ms. & $3.41\times10^{13}$ & $1.49$ & 2.1\,min \\
+  Simple$^2$ & sng. & $3.41\times10^{13}$ & $0.0192$ & 3.1\,s \\
+  Simple$^2$ & sng. & $3.41\times10^{13}$ & $0.0192$ & 3.1\,s \\
+  Simple$^2$ & ms. & $3.41\times10^{13}$ & $0.0154$ & 5.3\,s \\
+  Simple$^2$ & ms. & $3.41\times10^{13}$ & $0.0154$ & 5.3\,s \\
+  Simple & sng. & $3.41\times10^{13}$ & $0.125$ & 2.8\,s \\
+  Simple & sng. & $3.41\times10^{13}$ & $0.125$ & 2.8\,s \\
+  Simple & ms. & $3.41\times10^{13}$ & $0.125$ & 5.3\,s \\
+  Simple & ms. & $3.41\times10^{13}$ & $0.125$ & 5.3\,s \\
+  \bottomrule
+\end{tabular}
+}
+

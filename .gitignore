@@ -1,0 +1,24 @@
+.venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# LaTeX build products (sources and the PDF stay)
+*.aux
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.toc
+benchmark/article/*.log
+benchmark/article/*.out
+
+# Accidental empty files from a split plot command
+:crimson
+:darkorange,
+:seagreen,
+:steelblue,
+
+# Private Pasqal instances stay on this machine.
+benchmark/pasqal/
